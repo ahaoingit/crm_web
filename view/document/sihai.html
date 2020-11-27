@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" href="../../component/pear/css/pear.css" />
+		<link rel="stylesheet" href="../../component/layui/css/layui.css" />
+		<style>
+			body{margin: 10px;}
+			.search{
+				margin-top: 20px;
+				 text-align: center;
+				 
+			}
+			.layui-input{
+				width: 300px;
+			}
+			.layui-form,.delAll_btn,.add_btn,.change_btn{
+				display: inline-block;
+			}
+			.delAll_btn,.add_btn,.change_btn{
+				margin-left: 10px;
+			}
+			
+			}
+    
+  </style>
+
+	</head>
+	<body>
+
+		<!-- 搜索 -->
+		<!-- <div class="layui-fluid " style="margin-top: 20px;">
+			<form class="layui-form layui-col-space5">
+
+				<div class="layui-inline layui-show-xs-block">
+					<input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+				</div>
+				<div class="layui-inline layui-show-xs-block">
+					<button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+				</div>
+
+			</form>
+
+			<button class="layui-btn layui-btn-danger" onclick=""><i class="layui-icon"></i>批量删除</button>
+
+			<button class="layui-btn layui-btn-normal" onclick=""><i class="layui-icon"></i>新增用户</button>
+
+		</div> -->
+
+		<div class="layui-fluid search">
+			<form class="layui-form layui-col-space5">
+
+				<div class="layui-inline layui-show-xs-block">
+					<input type="text" class="layui-input" name="username" placeholder="请输入信息" autocomplete="off">
+				</div>
+				<div class="layui-inline layui-show-xs-block">
+					<button class="layui-btn search_btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+				</div>
+
+			</form>
+
+			<!-- <button class="layui-btn layui-btn-normal add_btn" lay-event="add_btn" id="add_btn"><i class="layui-icon"></i>新增用户</button>
+			<button class="layui-btn layui-btn-danger delAll_btn" onclick=""><i class="layui-icon"></i>批量删除</button>
+			<button class="layui-btn layui-btn-warm change_btn" onclick=""><i class="layui-icon"></i>批量转公海</button> -->
+		</div>
+
+		<!-- 数据表格 -->
+		<div class="layui-card-body layui-table-body layui-table-main" style="width: 100%;">
+			<table class="layui-hide" id="test" lay-filter="test"></table>
+
+
+		</div>
+		<div id="pages"></div>
+
+
+		<script src="../../component/layui/layui.js"></script>
+		<script src="../../component/pear/pear.js"></script>
+		<script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 左侧按钮功能 -->
+		<script type="text/html" id="toolbarDemo">
+
+			<div class="layui-btn-container">
+		    
+			<button class="layui-btn layui-btn-normal add_btn" lay-event="add_btn" id="add_btn"><i class="layui-icon"></i>新增客户</button>
+			<button class="layui-btn layui-btn-danger delAll_btn" onclick=""><i class="layui-icon"></i>批量删除</button>
+			<button class="layui-btn layui-btn-warm change_btn" onclick=""><i class="layui-icon"></i>批量转公海</button>
+			<button class="layui-btn layui-btn-md" lay-event="getCheckData">获取选中行数据</button>
+			<button class="layui-btn layui-btn-md" lay-event="getCheckLength">获取选中数目</button>
+			<button class="layui-btn layui-btn-md" lay-event="isAll">验证是否全选</button>
+			
+			
+		  </div>
+		</script>
+
+		<!-- 对数据进行的操作 -->
+		<script type="text/html" id="barDemo">
+
+			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+		  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+		</script>
+		<script>
+			layui.use(["table", "laypage", 'element', 'jquery', 'layer'], function() {
+				var table = layui.table;
+
+				table.render({
+					elem: '#test',
+					url: '/test/table/demo1.json',
+					toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
+
+					defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+						title: '提示',
+						layEvent: 'LAYTABLE_TIPS',
+						icon: 'layui-icon-tips'
+					}],
+					title: 'userListTable',
+					cols: [
+						[{
+								type: 'checkbox',
+								width: 80,
+								fixed: 'left'
+							}, {
+								field: 'cid',
+								title: '客户id',
+								width: 100
+							}, {
+								field: 'contactsName',
+								title: '联系人名称',
+								width: 180,
+								fixed: 'left',
+								unresize: true,
+								sort: true
+							},
+							{
+								field: 'cname',
+								title: '客户名称',
+								width: 230
+							},
+							{
+								field: 'position',
+								title: '职务',
+								width: 180,
+								edit: 'text'
+							}, {
+								field: 'industry',
+								title: '行业',
+								width: 180,
+								edit: 'text'
+							}
+
+							, {
+								field: 'address',
+								title: '地址',
+								width: 230,
+								edit: 'text',
+								sort: true
+							}, {
+								field: 'cSource',
+								title: '客户来源',
+								width: 180
+							}, {
+								field: 'cNotes',
+								title: '备注',
+								width: 180
+							}, {
+								field: 'phone',
+								title: '手机号码',
+								width: 180
+							},
+							{
+								field: 'tel',
+								title: '固定电话',
+								width: 180,
+								edit: 'text'
+							},
+							{
+								field: 'website',
+								title: '网站',
+								width: 230,
+								edit: 'text'
+							}, {
+								field: 'wechatName',
+								title: '微信',
+								width: 180
+							}
+
+
+							, {
+								fixed: 'right',
+								title: '操作',
+								toolbar: '#barDemo',
+								width: 230
+							}
+						]
+					],
+					page: true
+				});
+				var curr, limit;
+				var laypage = layui.laypage;
+				var table = layui.table;
+
+				laypage.render({
+					elem: "pages",
+					count: 500,
+					limit: 10,
+					limits: [10, 20, 30, 40, 50],
+					layout: ['prev', 'page', 'next', 'limit', 'count', 'skip'],
+					jump: function(obj, first) {
+						//obj包含了当前分页的所有参数，比如：
+						curr = obj.curr;
+						limit = obj.limit
+						// console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+						// console.log(obj.limit); //得到每页显示的条数
+					}
+				});
+				//头工具栏事件
+				table.on('toolbar(test)', function(obj) {
+					var checkStatus = table.checkStatus(obj.config.id);
+					switch (obj.event) {
+						case 'add_btn':
+
+							layer.open({
+								type: 2,
+								title: '请填写表单',
+								shadeClose: true,
+								shade: 0.8,
+								area: ['1000px', '90%'],
+								shadeClose: false,
+								content: 'add_sihai.html' //iframe的url	
+							});
+							//input above
+							break;
+						case 'getCheckData':
+							var data = checkStatus.data;
+							layer.alert(JSON.stringify(data));
+							break;
+						case 'getCheckLength':
+							var data = checkStatus.data;
+							layer.msg('选中了：' + data.length + ' 个');
+							break;
+						case 'isAll':
+							layer.msg(checkStatus.isAll ? '全选' : '未全选');
+							break;
+
+							//自定义头工具栏右侧图标 - 提示
+						case 'LAYTABLE_TIPS':
+							layer.alert('这是工具栏右侧自定义的一个图标按钮');
+							break;
+					};
+				});
+
+				//监听行工具事件
+				table.on('tool(test)', function(obj) {
+					var data = obj.data;
+					//console.log(obj)
+					if (obj.event === 'del') {
+						layer.confirm('真的删除行么', function(index) {
+							obj.del();
+							layer.close(index);
+						});
+					} else if (obj.event === 'edit') {
+						layer.prompt({
+							formType: 2,
+							value: data.email
+						}, function(value, index) {
+							obj.update({
+								email: value
+							});
+							layer.close(index);
+						});
+					}
+				});
+
+				//新增用户
+				// $(".add_btn").click(function(){
+				//   //input here
+				//   layer.open({
+				//     type: 2,
+				//     title: '请填写表单',
+				//     shadeClose: true,
+				//     shade: 0.8,
+				//     area: ['580px', '90%'],
+				//     shadeClose: false,
+				//     content: 'add_sihai.html' //iframe的url
+				//   });   
+				//  //input above
+				// });
+
+				// 批量删除
+				// $(".delAll_btn").click(function () {
+				//     var checkStatus = table.checkStatus('userListTable'),
+				//         data = checkStatus.data,
+				//         userId = "";
+				//     if (data.length > 0) {
+				//         for (var i in data) {
+				//             userId += data[i].id + ",";
+				//         }
+				//         console.log(userId);
+				//         layer.confirm('确定删除选中的用户？', {icon: 3, title: '提示信息'}, function (index) {
+				//             $.post('/###', {ids: userId}, function (data) {
+				//                 layer.msg(data.msg);
+				//                 tableIns.reload();
+				//                 layer.close(index);
+				//             });
+				//         })
+				//     } else {
+				//         layer.msg("请选择需要删除的用户");
+				//     }
+				// }); 
+
+				// // 搜索
+				// $('.search_btn').click(function () {
+				//   var inputVal = $('.layui-input').val()
+				//   table.reload('testReload', {
+				//   url: 'https://www.easy-mock.com/mock/5c131015dada7b27ac3a5c36/titi/noData'
+				//   // ,methods:"post"
+				//   ,request: {
+				//    pageName: 'page' //页码的参数名称，默认：page
+				//    ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+				//   }
+				//   ,where: {
+				//    query : inputVal
+				//   }
+				//   ,page: {
+				//    curr: 1
+				//   }
+				//   });
+				//  })
+
+			});
+		</script>
+	</body>
+</html>
