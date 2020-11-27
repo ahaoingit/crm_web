@@ -13,7 +13,7 @@
 			.layui-form{
 				margin-top: 50px;
 				margin-left: 30px;
-				
+
 			}
 			.layui-input-block,.layui-textarea,.source{
 				width: 300px;
@@ -24,7 +24,7 @@
 				margin-top: 30px;
 
 			}
-			
+
 			.left{
 				float: left;
 			}
@@ -87,14 +87,13 @@
 					        <option value="1">线上注册</option>
 					        <option value="2">广告渠道</option>
 					        <option value="3">个人资源</option>
-					        
 					      </select>
 					    </div>
 				</li>
 			</ul>
-		  
+
 		  <ul class="right">
-		  	
+
 			<li>
 				<div class="layui-form-item">
 						    <label class="layui-form-label">地址</label>
@@ -129,53 +128,68 @@
 			</li>
 			<li>
 				<div class="layui-form-item">
-						    <label class="layui-form-label">邮箱</label>
-						    <div class="layui-input-block">
-						      <input type="text" name="email" id="email" required  lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
-						    </div>
-						  </div>
-			</li>
-			<li>
-				<div class="layui-form-item">
 						    <label class="layui-form-label">微信</label>
 						    <div class="layui-input-block">
 						      <input type="text" name="wechatName" id="wechatName" required  lay-verify="required" placeholder="请输入微信" autocomplete="off" class="layui-input">
 						    </div>
 						  </div>
 			</li>
-			
+
 		  </ul>
-		  
-		  
+
+
 		  	<div class="layui-form-item">
 		  	  <div class="layui-input-block">
 		  	    <button class="layui-btn submit_btn" lay-submit lay-filter="formDemo" >立即提交</button>
 		  	    <button type="reset" class="layui-btn  reste_btn" >重置</button>
 		  	  </div>
 		  	</div>
-		 
-		  
-									  
+
+
+
 		   </div>
 
-		  
+
 		</form>
-		 
+
 		 <script src="../../component/layui/layui.js"></script>
 		 <script src="../../component/pear/pear.js"></script>
 		 <script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-		 
+		 <script src="../../js/ahao.js"></script>
 		<script>
 		//Demo
 		layui.use('form', function(){
 		  var form = layui.form;
-		  
+
 		  //监听提交
 		  form.on('submit(formDemo)', function(data){
-		    layer.msg(JSON.stringify(data.field));
-		    return false;
+		    let param = JSON.stringify(data.field);
+		    let index;
+		    $.ajax({
+				beforeSend:function(){
+					index = layer.load();
+				},
+				complete: function () {
+					layer.close(index);
+				},
+				url:serverUrl+"/client/addClientOfPublic",
+				method:'post',
+				data:data,
+				dataType:'json',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				success:function (data) {
+					alert(data.msg);
+				},
+				error:function () {
+					layer.msg("内部错误!",{icon:5})
+				}
+			})
 		  });
 		});
+
 		</script>
 	</body>
 </html>
