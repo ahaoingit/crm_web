@@ -13,7 +13,7 @@
 			.search{
 				margin-top: 20px;
 				 text-align: center;
-				 
+
 			}
 			.layui-input{
 				width: 300px;
@@ -24,14 +24,14 @@
 			.delAll_btn,.add_btn{
 				margin-left: 10px;
 			}
-			
+
 			}
-    
+
   </style>
 
 	</head>
 	<body>
-		
+
 		<!-- 搜索 -->
 		<div class="layui-fluid search">
 			<form class="layui-form layui-col-space5">
@@ -54,7 +54,7 @@
 		<!-- 数据表格 -->
 		<div class="layui-card-body layui-table-body layui-table-main" style="width: 100%;">
 			<table class="layui-hide layui-table-fixed" id="test" lay-filter="test"></table>
-			
+
 		</div>
 <div id="pages"></div>
 
@@ -98,7 +98,7 @@
 				//       area: ['580px', '90%'],
 				//       shadeClose: false,
 				//       content: 'add_gonghai.html' //iframe的url
-				//     });   
+				//     });
 				//    //input above
 				//   });
 
@@ -107,14 +107,19 @@
 					elem: '#test',
 					url: '/test/table/demo1.json',
 					toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
-
+					parseData:function(res){
+						return {
+							"code":0,
+							"data":res.data,
+						}
+					},
 					defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
 						title: '提示',
 						layEvent: 'LAYTABLE_TIPS',
 						icon: 'layui-icon-tips'
 					}],
 					title: 'userListTable',
-					
+
 					cols: [
 						[{
 								type: 'checkbox',
