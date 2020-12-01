@@ -31,7 +31,7 @@
 
 	</head>
 	<body>
-		
+
 		<!-- 搜索 -->
 		<div class="layui-fluid search">
 			<form class="layui-form layui-col-space5">
@@ -54,14 +54,15 @@
 		<!-- 数据表格 -->
 		<div class="layui-card-body layui-table-body layui-table-main" style="width: 100%;">
 			<table class="layui-hide layui-table-fixed" id="test" lay-filter="test"></table>
-			
+
 		</div>
-<div id="pages"></div>
+		<div id="pages"></div>
 
 
 		<script src="../../component/layui/layui.js"></script>
 		<script src="../../component/pear/pear.js"></script>
 		<script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/ahao.js" type="text/javascript" charset="utf-8"></script>
 
 		<!-- 左侧按钮功能 -->
 		<script type="text/html" id="toolbarDemo">
@@ -76,7 +77,7 @@
 
 		<!-- 对数据进行的操作 -->
 		<script type="text/html" id="barDemo">
-
+			<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
 			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 		  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 		</script>
@@ -87,34 +88,27 @@
 				var element = layui.element;
 				var layer = layui.layer;
 
-				// //alert
-				//   $(".add_btn").click(function(){
-				//     //input here
-				//     layer.open({
-				//       type: 2,
-				//       title: '请填写表单',
-				//       shadeClose: true,
-				//       shade: 0.8,
-				//       area: ['580px', '90%'],
-				//       shadeClose: false,
-				//       content: 'add_gonghai.html' //iframe的url
-				//     });   
-				//    //input above
-				//   });
+
 
 
 				table.render({
 					elem: '#test',
-					url: '/test/table/demo1.json',
+					url: serverUrl + '/client/showAllClientOfPublic',
 					toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
+					parseData: function(res) { //res 即为原始返回的数据
+						return {
+							"code": 0,
+							"data": res.data,
 
+						};
+					},
 					defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
 						title: '提示',
 						layEvent: 'LAYTABLE_TIPS',
 						icon: 'layui-icon-tips'
 					}],
 					title: 'userListTable',
-					
+
 					cols: [
 						[{
 								type: 'checkbox',
@@ -128,7 +122,6 @@
 								field: 'contactsName',
 								title: '联系人名称',
 								width: 180,
-								fixed: 'left',
 								unresize: true,
 								sort: true
 							},
@@ -179,14 +172,12 @@
 								title: '网站',
 								width: 230,
 								edit: 'text'
-							},  {
+							}, {
 								field: 'wechatName',
 								title: '微信',
 								width: 180
-							}
-
-
-							, {
+							},
+							{
 								fixed: 'right',
 								title: '操作',
 								toolbar: '#barDemo',

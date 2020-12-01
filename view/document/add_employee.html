@@ -30,7 +30,7 @@
 		  <div class="layui-form-item">
 		    <label class="layui-form-label">员工名称</label>
 		    <div class="layui-input-block">
-		      <input type="text" name="sys_user_name" id="sys_user_name" required  lay-verify="required" placeholder="请输入客户名称" autocomplete="off" class="layui-input">
+		      <input type="text" name="sysUserName" id="sys_user_name" required  lay-verify="required" placeholder="请输入客户名称" autocomplete="off" class="layui-input">
 		    </div>
 		  </div>
 		  
@@ -51,7 +51,7 @@
 		  <div class="layui-form-item">
 		    <label class="layui-form-label">加入时间</label>
 		    <div class="layui-input-block">
-		      <input type="text" name="join_time" id="join_time" required  lay-verify="required" placeholder="请输入加入时间" autocomplete="off" class="layui-input">
+		      <input type="text" name="joinTime" id="join_time" required  lay-verify="required" placeholder="请输入加入时间" autocomplete="off" class="layui-input">
 		    </div>
 		  </div>
 		  
@@ -64,7 +64,7 @@
 		  <div class="layui-form-item">
 		    <label class="layui-form-label">所属部门</label>
 		    <div class="layui-input-block">
-		      <input type="text" name="d_id" id="d_id" required  lay-verify="required" placeholder="请输入部门" autocomplete="off" class="layui-input">
+		      <input type="text" name="dId" id="d_id" required  lay-verify="required" placeholder="请输入部门" autocomplete="off" class="layui-input">
 		    </div>
 		  </div>
 
@@ -79,15 +79,30 @@
 		 <script src="../../component/layui/layui.js"></script>
 		 <script src="../../component/pear/pear.js"></script>
 		 <script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		 <script src="../../js/ahao.js" type="text/javascript" charset="utf-8"></script>
 		 
 		<script>
 		//Demo
-		layui.use('form', function(){
+		layui.use(['form','layer'], function(){
 		  var form = layui.form;
 		  
 		  //监听提交
 		  form.on('submit(formDemo)', function(data){
-		    layer.msg(JSON.stringify(data.field));
+		    // layer.msg(JSON.stringify(data.field));
+			//向后台发送ajax请求
+			            $.ajax({
+			                //编写json格式，设置属性和值
+			                url:serverUrl+"/sysUsers/addNewSysUser",
+			                contentType:"application/json;charset=utf-8",
+			                data:JSON.stringify(data.field),
+			                dataType:"json",
+			                type:"post",
+			                success:function (data){
+			                    //服务器端成功响应的json数据，进行解析
+								parent.layer.close();
+			                }
+			            })
+						
 		    return false;
 		  });
 		});

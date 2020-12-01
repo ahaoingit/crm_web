@@ -9,6 +9,8 @@
 		<title></title>
 		<link rel="stylesheet" href="../../component/pear/css/pear.css" />
 		<link rel="stylesheet" href="../../component/layui/css/layui.css" />
+		<script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/ahao.js" type="text/javascript" charset="utf-8"></script>
 		<style>
 			.layui-form{
 				margin-top: 100px;
@@ -39,7 +41,7 @@
 		  <div class="layui-form-item">
 		    <label class="layui-form-label">创建人</label>
 		    <div class="layui-input-block">
-		      <input type="text" name="p_create_person" id="p_create_person" required  lay-verify="required" placeholder="请输入创建人" autocomplete="off" class="layui-input">
+		      <input type="text" name="pCreatePerson" id="pCreatePerson" required  lay-verify="required" placeholder="请输入创建人" autocomplete="off" class="layui-input">
 		    </div>
 		  </div>
 		  
@@ -48,7 +50,7 @@
 		  <div class="layui-form-item">
 		    <label class="layui-form-label">创建日期</label>
 		    <div class="layui-input-block">
-		      <input type="text" name="create_date" id="create_date" required  lay-verify="required" placeholder="请输入创建时间" autocomplete="off" class="layui-input">
+		      <input type="text" name="pCreateTime" id="pCreatePerson" required  lay-verify="required" placeholder="请输入创建时间" autocomplete="off" class="layui-input">
 		    </div>
 		  </div>
 		  
@@ -68,12 +70,25 @@
 		 
 		<script>
 		//Demo
-		layui.use('form', function(){
+		layui.use(['form','layer'], function(){
 		  var form = layui.form;
 		  
 		  //监听提交
 		  form.on('submit(formDemo)', function(data){
-		    layer.msg(JSON.stringify(data.field));
+		    // layer.msg(JSON.stringify(data.field));
+			$.ajax({
+			    //编写json格式，设置属性和值
+			    url:serverUrl+"/product/addNewProduct",
+			    contentType:"application/json;charset=utf-8",
+			    data:JSON.stringify(data.field),
+			    dataType:"json",
+			    type:"post",
+			    success:function (data){
+			        //服务器端成功响应的json数据，进行解析
+					
+			    }
+			})
+			parent.layer.close();
 		    return false;
 		  });
 		});
