@@ -38,14 +38,14 @@
 		<button class="layui-btn layui-btn-danger delAll_btn" ><i class="layui-icon"></i>批量删除</button> -->
 	</div>
  <div class="container" style="width: 100%;">
- 	<table class="layui-hide" id="demo" lay-filter="test"></table>
+ 	<table class="layui-hide" id="demo" lay-filter="test" ></table>
  	<div id="pages"></div>
  </div>
 
  
 <script type="text/html" id="barDemo">
-   <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+   <!-- <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a> -->
+   <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
  
@@ -70,21 +70,22 @@ layui.use(['laydate', 'laypage', 'layer', 'table'], function(){
   table.render({
     elem: '#demo'
     ,height: 420
-    ,url: serverUrl + "/product/showAllProducts" //数据接口
+    ,url: serverUrl + "/product/findProductForPage" //数据接口
     ,title: 'product'
     ,page: true //开启分页
     ,toolbar: 'default', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
     parseData: function(res){ //res 即为原始返回的数据
                    return {
                        "code": 0, 
-                       "data": res.data
+                       "data": res.data,
+					   "count":res.count,
                    };
                }
     ,cols: [[ //表头
-      {type: 'checkbox', fixed: 'left'}
+      {type: 'checkbox', width:80,fixed: 'left'}
       ,{field: 'pid', title: '序号', width:100, sort: true}
-      ,{field: 'pname', title: '产品名称', width:200,sort: true}
-      ,{field: 'pCreatePerson', title: '创建人', width: 200, sort: true}
+      ,{field: 'pname', title: '产品名称', width:200,sort: true,edit: 'text'}
+      ,{field: 'pCreatePerson', title: '创建人', width: 200, sort: true,edit: 'text'}
       ,{field: 'pCreateTime', title: '创建日期', width: 200, sort: true}
       ,{ title: '操作 ', align:'center', toolbar: '#barDemo'}
     ]]
@@ -113,7 +114,7 @@ layui.use(['laydate', 'laypage', 'layer', 'table'], function(){
         } else if(data.length > 1){
           layer.msg('只能同时编辑一个');
         } else {
-          layer.alert('编辑 [id]：'+ checkStatus.data[0].id);
+          layer.alert("请直接在表格内编辑"+ checkStatus.data[0].pid+"号");
         }
       break;
       case 'delete':
@@ -163,31 +164,28 @@ layui.use(['laydate', 'laypage', 'layer', 'table'], function(){
 	                      layer.close(index); 
 	                       });
     } else if(layEvent === 'edit'){
-      layer.msg('编辑操作');
+     layer.msg('请直接在表格内修改！');
     }
   });
   
-  
-  
- //分页
- var curr, limit;
-  				var laypage = layui.laypage;
-  				var table = layui.table;
-  
-  				laypage.render({
-  					elem: "pages",
-  					count: 500,
-  					limit: 10,
-  					limits: [10, 20, 30, 40, 50],
-  					layout: ['prev', 'page', 'next', 'limit', 'count', 'skip'],
-  					jump: function(obj, first) {
-  						//obj包含了当前分页的所有参数，比如：
-  						curr = obj.curr;
-  						limit = obj.limit
-  						// console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
-  						// console.log(obj.limit); //得到每页显示的条数
-  					}
-  				});
+  //编辑
+  table.on('edit(test)',function(obj){
+	  var value = obj.value //得到修改后的值
+	      ,data = obj.data //得到所在行所有键值
+	      ,field = obj.field; //得到字段
+	       layer.msg('[ID: '+ data.pid +'] ' + field + ' 字段更改为：'+ value);
+	 var paramJson = {};
+	 paramJson["pid"] = data.pid;
+	 paramJson[field] = value;
+		  $.ajax({
+			  url:serverUrl+'/product/updateProduct',
+			  contentType:"application/json;charset=utf-8",
+			  data:	 JSON.stringify(paramJson),
+			  dataType:"json",
+			  type:"post",
+		  })
+  })
+
  
 });
 </script>

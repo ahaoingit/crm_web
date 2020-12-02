@@ -84,27 +84,27 @@ layui.use(["table", "laypage", 'element', 'jquery', 'layer'], function(){
   //执行一个 table 实例
   table.render({
     elem: '#demo'
-    ,height: 420
-    ,url: serverUrl+"/sysUsers/showAllSysUsers" //数据接口
-	
+    ,height:420
+    ,url: serverUrl + "/sysUsers/findSysUserForPage" //数据接口
     ,title: 'employee'
     ,page: true //开启分页
     ,toolbar: 'default' ,//开启工具栏，此处显示默认图标，可以自定义模板，详见文档
      parseData: function(res){ //res 即为原始返回的数据
                     return {
                         "code": 0, 
-                        "data": res.data
+                        "data": res.data,
+						"count":res.count,
                     };
                 }
     ,cols: [[ //表头
       {type: 'checkbox',fixed:'left'},
 	  {field: 'sysUserId', title: '序号', width:80, sort: true},
-      {field: 'sysUserName', title: '员工名称', width:120, sort: true}
-      ,{field: 'phone', title: '手机', width:180}
-      ,{field: 'email', title: '邮箱', width: 180, sort: true}
+      {field: 'sysUserName', title: '员工名称', width:120, sort: true,edit: 'text'}
+      ,{field: 'phone', title: '手机', width:180,edit: 'text'}
+      ,{field: 'email', title: '邮箱', width: 180, sort: true,edit: 'text'}
       ,{field: 'joinTime', title: '加入时间', width:180, sort: true}
-      ,{field: 'password', title: '密码', width: 180, sort: true}
-	  ,{field: 'dId', title: '所属部门', width: 120, sort: true}
+      ,{field: 'password', title: '密码', width: 180, sort: true,edit: 'text'}
+	  ,{field: 'dId', title: '所属部门', width: 120, sort: true,edit: 'text'}
       ,{ title: '操作 ',width: 200, align:'center', toolbar: '#barDemo'}
     ]]
   });
@@ -134,7 +134,7 @@ layui.use(["table", "laypage", 'element', 'jquery', 'layer'], function(){
         } else if(data.length > 1){
           layer.msg('只能同时编辑一个');
         } else {
-          layer.alert('编辑 [id]：'+ checkStatus.data[0].id);
+          layer.alert("请直接在表格内编辑"+ checkStatus.data[0].sysUserId+"号");
         }
       break;
       case 'delete':
@@ -184,32 +184,29 @@ layui.use(["table", "laypage", 'element', 'jquery', 'layer'], function(){
 	                      layer.close(index); 
 	                       });
     } else if(layEvent === 'edit'){
-      layer.msg('编辑操作');
+      layer.msg('请直接在表格内修改');
     }
   });
   
-  
-  var curr, limit;
-  				var laypage = layui.laypage;
-  				var table = layui.table;
-  
-  				laypage.render({
-  					elem: "pages",
-  					count: 500,
-  					limit: 10,
-  					limits: [10, 20, 30, 40, 50],
-  					layout: ['prev', 'page', 'next', 'limit', 'count', 'skip'],
-  					jump: function(obj, first) {
-  						//obj包含了当前分页的所有参数，比如：
-  						curr = obj.curr;
-  						limit = obj.limit
-  						// console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
-  						// console.log(obj.limit); //得到每页显示的条数
-  					}
-  				});
- 
-  
-  
+  //编辑
+  table.on('edit(test)',function(obj){
+  	  var value = obj.value //得到修改后的值
+  	      ,data = obj.data //得到所在行所有键值
+  	      ,field = obj.field; //得到字段
+  	       layer.msg('[ID: '+ data.sysUserId +'] ' + field + ' 字段更改为：'+ value);
+  	 var paramJson = {};
+  	 paramJson["sysUserId"] = data.sysUserId;
+  	 paramJson[field] = value;
+  		  $.ajax({
+  			  url:serverUrl+"/sysUsers/updateSysUser",
+  			  contentType:"application/json;charset=utf-8",
+  			  data:	 JSON.stringify(paramJson),
+  			  dataType:"json",
+  			  type:"post",
+  		  })
+  })
+
+
  
 });
 </script>

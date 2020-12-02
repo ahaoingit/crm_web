@@ -9,6 +9,11 @@
 		<title></title>
 		<link rel="stylesheet" href="../../component/pear/css/pear.css" />
 		<link rel="stylesheet" href="../../component/layui/css/layui.css" />
+		<script src="../../component/layui/layui.js"></script>
+		<script src="../../component/pear/pear.js"></script>
+		<script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/ahao.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/My97DatePicker/WdatePicker.js" type="text/javascript" charset="utf-8"></script>
 		<style>
 			.layui-form{
 				margin-top: 50px;
@@ -51,8 +56,11 @@
 		  <div class="layui-form-item">
 		    <label class="layui-form-label">加入时间</label>
 		    <div class="layui-input-block">
-		      <input type="text" name="joinTime" id="join_time" required  lay-verify="required" placeholder="请输入加入时间" autocomplete="off" class="layui-input">
-		    </div>
+		      <!-- <input type="text" name="joinTime" id="join_time" required  lay-verify="required" placeholder="请输入加入时间" autocomplete="off" class="layui-input"> -->
+		    <input type="text"  name="joinTime" id="timeVal" style="width: 140px; padding-left: 5px;margin-left: -110px;height: 30px;" onclick="WdatePicker({lang:'en',dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})">
+		    <img onclick="WdatePicker({el:'timeVal',lang:'en',dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})" src="../../js/My97DatePicker/skin/calendar.png"
+		    height="40px" align="absmiddle" style="cursor:pointer;margin: 0px 8px 0px -10px;">
+			</div>
 		  </div>
 		  
 		  <div class="layui-form-item">
@@ -76,11 +84,7 @@
 		  </div>
 		</form>
 		 
-		 <script src="../../component/layui/layui.js"></script>
-		 <script src="../../component/pear/pear.js"></script>
-		 <script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-		 <script src="../../js/ahao.js" type="text/javascript" charset="utf-8"></script>
-		 
+		
 		<script>
 		//Demo
 		layui.use(['form','layer'], function(){
@@ -97,9 +101,28 @@
 			                data:JSON.stringify(data.field),
 			                dataType:"json",
 			                type:"post",
-			                success:function (data){
-			                    //服务器端成功响应的json数据，进行解析
-								parent.layer.close();
+			                success: function(data) {
+			                	console.log(data);
+			                	if (data.code == 200) {
+			                		layer.msg(data.msg, {
+			                			icon: 5,
+			                			time: 2000
+			                		});
+			                		return false;
+			                	} else {
+			                		layer.msg(data.msg, {
+			                			icon: 1,
+			                			time: 1000
+			                		});
+			                		setTimeout(function() {
+			                			window.parent.location.reload();
+			                			var index = parent.layer.getFrameIndex(window.name);
+			                			parent.layer.close(index);
+			                		}, 1000);
+			                		return true;
+			                		
+			                		
+			                	}
 			                }
 			            })
 						

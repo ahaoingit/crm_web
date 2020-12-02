@@ -13,7 +13,7 @@
 			.search{
 				margin-top: 20px;
 				 text-align: center;
-				 
+
 			}
 			.layui-input{
 				width: 300px;
@@ -24,9 +24,9 @@
 			.delAll_btn,.add_btn{
 				margin-left: 10px;
 			}
-			
+
 			}
-    
+
   </style>
 
 	</head>
@@ -77,7 +77,7 @@
 
 		<!-- 对数据进行的操作 -->
 		<script type="text/html" id="barDemo">
-			<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+
 			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 		  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 		</script>
@@ -87,9 +87,6 @@
 				var $ = layui.jquery;
 				var element = layui.element;
 				var layer = layui.layer;
-
-
-
 
 				table.render({
 					elem: '#test',
@@ -101,6 +98,8 @@
 							"data": res.data,
 
 						};
+				
+
 					},
 					defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
 						title: '提示',
@@ -187,24 +186,7 @@
 					],
 					page: true
 				});
-				var curr, limit;
-				var laypage = layui.laypage;
-
-
-				laypage.render({
-					elem: "pages",
-					count: 500,
-					limit: 10,
-					limits: [10, 20, 30, 40, 50],
-					layout: ['prev', 'page', 'next', 'limit', 'count', 'skip'],
-					jump: function(obj, first) {
-						//obj包含了当前分页的所有参数，比如：
-						curr = obj.curr;
-						limit = obj.limit
-						// console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
-						// console.log(obj.limit); //得到每页显示的条数
-					}
-				});
+				
 				//头工具栏事件
 				table.on('toolbar(test)', function(obj) {
 					var checkStatus = table.checkStatus(obj.config.id);
@@ -292,24 +274,7 @@
 				//     }
 				// });
 
-				// 搜索
-				// $('.search_btn').click(function () {
-				//   var inputVal = $('.layui-input').val()
-				//   table.reload('testReload', {
-				//   url: ''
-				//   // ,methods:"post"
-				//   ,request: {
-				//    pageName: 'page' //页码的参数名称，默认：page
-				//    ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
-				//   }
-				//   ,where: {
-				//    query : inputVal
-				//   }
-				//   ,page: {
-				//    curr: 1
-				//   }
-				//   });
-				//  })
+			
 
 
 

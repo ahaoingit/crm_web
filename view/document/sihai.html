@@ -57,7 +57,7 @@
 
 
 		</div>
-		<div id="pages"></div>
+		
 
 
 		<script src="../../component/layui/layui.js"></script>
@@ -82,7 +82,7 @@
 
 		<!-- 对数据进行的操作 -->
 		<script type="text/html" id="barDemo">
-			<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+		
 			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 		  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 		</script>
@@ -187,24 +187,7 @@
 					],
 					page: true
 				});
-				var curr, limit;
-				var laypage = layui.laypage;
-				var table = layui.table;
-
-				laypage.render({
-					elem: "pages",
-					count: 500,
-					limit: 10,
-					limits: [10, 20, 30, 40, 50],
-					layout: ['prev', 'page', 'next', 'limit', 'count', 'skip'],
-					jump: function(obj, first) {
-						//obj包含了当前分页的所有参数，比如：
-						curr = obj.curr;
-						limit = obj.limit
-						// console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
-						// console.log(obj.limit); //得到每页显示的条数
-					}
-				});
+				
 				//头工具栏事件
 				table.on('toolbar(test)', function(obj) {
 					var checkStatus = table.checkStatus(obj.config.id);
@@ -263,20 +246,7 @@
 					}
 				});
 
-				//新增用户
-				// $(".add_btn").click(function(){
-				//   //input here
-				//   layer.open({
-				//     type: 2,
-				//     title: '请填写表单',
-				//     shadeClose: true,
-				//     shade: 0.8,
-				//     area: ['580px', '90%'],
-				//     shadeClose: false,
-				//     content: 'add_sihai.html' //iframe的url
-				//   });   
-				//  //input above
-				// });
+			
 
 				// 批量删除
 				// $(".delAll_btn").click(function () {
