@@ -56,13 +56,15 @@
 			<table class="layui-hide layui-table-fixed" id="test" lay-filter="test"></table>
 
 		</div>
-<div id="pages"></div>
+		<div id="pages"></div>
 
 
 		<script src="../../component/layui/layui.js"></script>
 		<script src="../../component/pear/pear.js"></script>
 		<script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/ahao.js"></script>
+		<script src="../../js/ahao.js" type="text/javascript" charset="utf-8"></script>
+
 		<!-- 左侧按钮功能 -->
 		<script type="text/html" id="toolbarDemo">
 			<div class="layui-btn-container">
@@ -90,13 +92,19 @@
 					url: serverUrl+'/client/findClientOfPublicForPage',
 					headers:{
 						"Token":selectToken()
-					},
+
+				table.render({
+					elem: '#test',
+					url: serverUrl + '/client/showAllClientOfPublic',
 					toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
-					parseData:function(res){
+					parseData: function(res) { //res 即为原始返回的数据
 						return {
-							"code":0,
-							"data":res.data,
-						}
+							"code": 0,
+							"data": res.data,
+
+						};
+				
+
 					},
 					defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
 						title: '提示',
@@ -109,7 +117,7 @@
 						[{
 								type: 'checkbox',
 								width: 80,
-								fixed: 'left'
+								
 							}, {
 								field: 'cid',
 								title: '客户id',
@@ -118,7 +126,6 @@
 								field: 'contactsName',
 								title: '联系人名称',
 								width: 180,
-								fixed: 'left',
 								unresize: true,
 								sort: true
 							},
@@ -169,14 +176,12 @@
 								title: '网站',
 								width: 230,
 								edit: 'text'
-							},  {
+							}, {
 								field: 'wechatName',
 								title: '微信',
 								width: 180
-							}
-
-
-							, {
+							},
+							{
 								fixed: 'right',
 								title: '操作',
 								toolbar: '#barDemo',
@@ -273,24 +278,7 @@
 				//     }
 				// });
 
-				// 搜索
-				// $('.search_btn').click(function () {
-				//   var inputVal = $('.layui-input').val()
-				//   table.reload('testReload', {
-				//   url: ''
-				//   // ,methods:"post"
-				//   ,request: {
-				//    pageName: 'page' //页码的参数名称，默认：page
-				//    ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
-				//   }
-				//   ,where: {
-				//    query : inputVal
-				//   }
-				//   ,page: {
-				//    curr: 1
-				//   }
-				//   });
-				//  })
+			
 
 
 

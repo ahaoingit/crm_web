@@ -102,7 +102,7 @@
 								field: 'b_name',
 								title: '商机名称',
 								width: 200,
-								fixed: 'left',
+								
 								unresize: true,							
 							}, {
 								field: 'cname',
@@ -142,25 +142,7 @@
 						],
 						page: true
 					});
-					// 分页
-					var curr, limit;
-					var laypage = layui.laypage;
-					
-					
-					laypage.render({
-						elem: "pages",
-						count: 500,
-						limit: 10,
-						limits: [10, 20, 30, 40, 50],
-						layout: ['prev', 'page', 'next', 'limit', 'count', 'skip'],
-						jump: function(obj, first) {
-							//obj包含了当前分页的所有参数，比如：
-							curr = obj.curr;
-							limit = obj.limit
-							// console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
-							// console.log(obj.limit); //得到每页显示的条数
-						}
-					});
+				
 					//头工具栏事件
 					table.on('toolbar(test)', function(obj) {
 						var checkStatus = table.checkStatus(obj.config.id);

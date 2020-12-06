@@ -27,50 +27,90 @@
 	</head>
 	<body>
 		<form class="layui-form" action="">
-		  <div class="layui-form-item">
-		    <label class="layui-form-label">部门名称</label>
-		    <div class="layui-input-block">
-		      <input type="text" name="d_name" id="d_name" required  lay-verify="required" placeholder="请输入部门名称" autocomplete="off" class="layui-input">
-		    </div>
-		  </div>
-		 
-		  <div class="layui-form-item">
-		    <label class="layui-form-label">部门等级</label>
-		    <div class="layui-input-block">
-		      <select class="select" name="d_rank" id="d_rank" lay-verify="required">
-		        <option value=""></option>
-		        <option value="0">1</option>
-		        <option value="1">2</option> 
-		      </select>
-		    </div>
-		  </div>
-		  
-		  
-		 
+			<div class="layui-form-item">
+				<label class="layui-form-label">部门名称</label>
+				<div class="layui-input-block">
+					<input type="text" name="dName" id="d_name" required lay-verify="required" placeholder="请输入部门名称" autocomplete="off"
+					 class="layui-input">
+				</div>
+			</div>
 
-		  <div class="layui-form-item">
-		    <div class="layui-input-block">
-		      <button class="layui-btn submit_btn" lay-submit lay-filter="formDemo">立即提交</button>
-		      <button type="reset" class="layui-btn  reste_btn">重置</button>
-		    </div>
-		  </div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">部门等级</label>
+				<div class="layui-input-block">
+					<select class="select" name="dRank" id="d_rank" lay-verify="required">
+						<option value=""></option>
+						<option value="0">1</option>
+						<option value="1">2</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">父级部门</label>
+				<div class="layui-input-block">
+					<input type="text" name="dParentId" id="dParentId" required lay-verify="required" placeholder="请输入部门名称"
+					 autocomplete="off" class="layui-input">
+				</div>
+			</div>
+
+
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn submit_btn" lay-submit lay-filter="formDemo">立即提交</button>
+					<button type="reset" class="layui-btn  reste_btn">重置</button>
+				</div>
+			</div>
 		</form>
-		 
-		 <script src="../../component/layui/layui.js"></script>
-		 <script src="../../component/pear/pear.js"></script>
-		 <script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-		 
+
+		<script src="../../component/layui/layui.js"></script>
+		<script src="../../component/pear/pear.js"></script>
+		<script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/ahao.js" type="text/javascript" charset="utf-8"></script>
 		<script>
-		//Demo
-		layui.use('form', function(){
-		  var form = layui.form;
-		  
-		  //监听提交
-		  form.on('submit(formDemo)', function(data){
-		    layer.msg(JSON.stringify(data.field));
-		    return false;
-		  });
-		});
+			//Demo
+			layui.use(['form', 'layer'], function() {
+				var form = layui.form;
+
+				//监听提交
+				form.on('submit(formDemo)', function(data) {
+					//layer.msg(JSON.stringify(data.field));
+					$.ajax({
+						//编写json格式，设置属性和值
+						url: serverUrl + "/department/addDepartment",
+						contentType: "application/json;charset=utf-8",
+						data: JSON.stringify(data.field),
+						dataType: "json",
+						type: "post",
+						
+						success: function(data) {
+							console.log(data);
+							if (data.code == 200) {
+								layer.msg(data.msg, {
+									icon: 5,
+									time: 2000
+								});
+								return false;
+							} else {
+								layer.msg(data.msg, {
+									icon: 1,
+									time: 1000
+								});
+								setTimeout(function() {
+									window.parent.location.reload();
+									var index = parent.layer.getFrameIndex(window.name);
+									parent.layer.close(index);
+								}, 1000);
+								return true;
+								
+								
+							}
+						}
+
+					})
+					return false;
+				});
+			});
 		</script>
 	</body>
 </html>

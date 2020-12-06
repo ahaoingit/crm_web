@@ -32,24 +32,7 @@
 	</head>
 	<body>
 
-		<!-- 搜索 -->
-		<!-- <div class="layui-fluid " style="margin-top: 20px;">
-			<form class="layui-form layui-col-space5">
 
-				<div class="layui-inline layui-show-xs-block">
-					<input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
-				</div>
-				<div class="layui-inline layui-show-xs-block">
-					<button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-				</div>
-
-			</form>
-
-			<button class="layui-btn layui-btn-danger" onclick=""><i class="layui-icon"></i>批量删除</button>
-
-			<button class="layui-btn layui-btn-normal" onclick=""><i class="layui-icon"></i>新增用户</button>
-
-		</div> -->
 
 		<div class="layui-fluid search">
 			<form class="layui-form layui-col-space5">
@@ -74,12 +57,13 @@
 
 
 		</div>
-		<div id="pages"></div>
+		
 
 
 		<script src="../../component/layui/layui.js"></script>
 		<script src="../../component/pear/pear.js"></script>
 		<script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/ahao.js" type="text/javascript" charset="utf-8"></script>
 		<!-- 左侧按钮功能 -->
 		<script type="text/html" id="toolbarDemo">
 
@@ -98,7 +82,7 @@
 
 		<!-- 对数据进行的操作 -->
 		<script type="text/html" id="barDemo">
-
+		
 			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 		  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 		</script>
@@ -108,9 +92,14 @@
 
 				table.render({
 					elem: '#test',
-					url: '/test/table/demo1.json',
+					url: serverUrl + '/client/showClientOfPrivate',
 					toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
-
+					parseData: function(res) { //res 即为原始返回的数据
+						return {
+							"code": 0,
+							"data": res.data
+						};
+					},
 					defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
 						title: '提示',
 						layEvent: 'LAYTABLE_TIPS',
@@ -121,7 +110,7 @@
 						[{
 								type: 'checkbox',
 								width: 80,
-								fixed: 'left'
+								
 							}, {
 								field: 'cid',
 								title: '客户id',
@@ -198,24 +187,7 @@
 					],
 					page: true
 				});
-				var curr, limit;
-				var laypage = layui.laypage;
-				var table = layui.table;
-
-				laypage.render({
-					elem: "pages",
-					count: 500,
-					limit: 10,
-					limits: [10, 20, 30, 40, 50],
-					layout: ['prev', 'page', 'next', 'limit', 'count', 'skip'],
-					jump: function(obj, first) {
-						//obj包含了当前分页的所有参数，比如：
-						curr = obj.curr;
-						limit = obj.limit
-						// console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
-						// console.log(obj.limit); //得到每页显示的条数
-					}
-				});
+				
 				//头工具栏事件
 				table.on('toolbar(test)', function(obj) {
 					var checkStatus = table.checkStatus(obj.config.id);
@@ -274,20 +246,7 @@
 					}
 				});
 
-				//新增用户
-				// $(".add_btn").click(function(){
-				//   //input here
-				//   layer.open({
-				//     type: 2,
-				//     title: '请填写表单',
-				//     shadeClose: true,
-				//     shade: 0.8,
-				//     area: ['580px', '90%'],
-				//     shadeClose: false,
-				//     content: 'add_sihai.html' //iframe的url
-				//   });   
-				//  //input above
-				// });
+			
 
 				// 批量删除
 				// $(".delAll_btn").click(function () {

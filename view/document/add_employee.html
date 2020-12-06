@@ -9,6 +9,11 @@
 		<title></title>
 		<link rel="stylesheet" href="../../component/pear/css/pear.css" />
 		<link rel="stylesheet" href="../../component/layui/css/layui.css" />
+		<script src="../../component/layui/layui.js"></script>
+		<script src="../../component/pear/pear.js"></script>
+		<script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/ahao.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/My97DatePicker/WdatePicker.js" type="text/javascript" charset="utf-8"></script>
 		<style>
 			.layui-form{
 				margin-top: 50px;
@@ -27,70 +32,180 @@
 	</head>
 	<body>
 		<form class="layui-form" action="">
-		  <div class="layui-form-item">
-		    <label class="layui-form-label">员工名称</label>
-		    <div class="layui-input-block">
-		      <input type="text" name="sys_user_name" id="sys_user_name" required  lay-verify="required" placeholder="请输入客户名称" autocomplete="off" class="layui-input">
-		    </div>
-		  </div>
-		  
-		  <div class="layui-form-item">
-		    <label class="layui-form-label">手机</label>
-		    <div class="layui-input-block">
-		      <input type="text" name="phone" id="phone" required  lay-verify="required" placeholder="请输入手机号" autocomplete="off" class="layui-input">
-		    </div>
-		  </div>
-		  
-		  <div class="layui-form-item">
-		    <label class="layui-form-label">邮箱</label>
-		    <div class="layui-input-block">
-		      <input type="text" name="email" id="email" required  lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
-		    </div>
-		  </div>
-		  
-		  <div class="layui-form-item">
-		    <label class="layui-form-label">加入时间</label>
-		    <div class="layui-input-block">
-		      <input type="text" name="join_time" id="join_time" required  lay-verify="required" placeholder="请输入加入时间" autocomplete="off" class="layui-input">
-		    </div>
-		  </div>
-		  
-		  <div class="layui-form-item">
-		    <label class="layui-form-label">密码</label>
-		    <div class="layui-input-block">
-		      <input type="text" name="password" id="password" required  lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
-		    </div>
-		  </div>
-		  <div class="layui-form-item">
-		    <label class="layui-form-label">所属部门</label>
-		    <div class="layui-input-block">
-		      <input type="text" name="d_id" id="d_id" required  lay-verify="required" placeholder="请输入部门" autocomplete="off" class="layui-input">
-		    </div>
-		  </div>
+			<div class="layui-form-item" hidden>
+				<label class="layui-form-label">员工Id</label>
+				<div class="layui-input-block">
+					<input type="text" name="sysUserId" id="sysUserId" required lay-verify="required" placeholder="请输入客户名称"
+					 autocomplete="off" class="layui-input">
+				</div>
+				</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">员工名称</label>
+				<div class="layui-input-block">
+					<input type="text" name="sysUserName" id="sysUserName" required lay-verify="required" placeholder="请输入客户名称"
+					 autocomplete="off" class="layui-input">
+				</div>
+			</div>
 
-		  <div class="layui-form-item">
-		    <div class="layui-input-block">
-		      <button class="layui-btn submit_btn" lay-submit lay-filter="formDemo">立即提交</button>
-		      <button type="reset" class="layui-btn  reste_btn">重置</button>
-		    </div>
-		  </div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">手机</label>
+				<div class="layui-input-block">
+					<input type="text" name="phone" id="phone" required lay-verify="required" placeholder="请输入手机号" autocomplete="off"
+					 class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">邮箱</label>
+				<div class="layui-input-block">
+					<input type="text" name="email" id="email" required lay-verify="required" placeholder="请输入邮箱" autocomplete="off"
+					 class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">加入时间</label>
+				<div class="layui-input-block">
+					<!-- <input type="text" name="joinTime" id="join_time" required  lay-verify="required" placeholder="请输入加入时间" autocomplete="off" class="layui-input"> -->
+					<input type="text"  name="pCreateTime" id="timeVal" style="width: 250px;height: 30px;" onclick="WdatePicker({lang:'en',dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})">
+					<img onclick="WdatePicker({el:'timeVal',lang:'en',dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})" src="../../js/My97DatePicker/skin/calendar.png"
+					 height="40px" align="absmiddle" style="cursor:pointer;margin: 0px 8px 0px -10px;">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">密码</label>
+				<div class="layui-input-block">
+					<input type="text" name="password" id="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off"
+					 class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">所属部门</label>
+				<div class="layui-input-block">
+					<!-- <input type="text" name="dId" id="d_id" required  lay-verify="required" placeholder="请输入部门" autocomplete="off" class="layui-input"> -->
+					<select id="departmentSelect" name="dId" lay-filter="selector">
+						<!-- <option id=""></option> -->
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn submit_btn" lay-submit lay-filter="submit">立即添加</button>
+					<!-- <button type="reset" class="layui-btn  reste_btn">重置</button> -->
+					<button class="layui-btn edit_btn" lay-submit lay-filter="edit">保存修改</button>
+				</div>
+			</div>
 		</form>
-		 
-		 <script src="../../component/layui/layui.js"></script>
-		 <script src="../../component/pear/pear.js"></script>
-		 <script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-		 
+
+
 		<script>
-		//Demo
-		layui.use('form', function(){
-		  var form = layui.form;
-		  
-		  //监听提交
-		  form.on('submit(formDemo)', function(data){
-		    layer.msg(JSON.stringify(data.field));
-		    return false;
-		  });
-		});
+			// init select	
+			$.ajax({
+				url: serverUrl + "/department/showAllDepartment",
+				contentType: "application/json;charset=utf-8",
+				dataType: "json",
+				type: "post",
+				success: function(data) {
+					if(data.code === 1) {
+						var department = data.data;
+						var selectContent = " ";
+						var dName=null;
+						 for(index in department) {
+							 selectContent += `<option id=${department[index].did} value=${department[index].dName}>${department[index].dName}</option>`;
+						 }
+						 // console.log(selectContent)
+						 $("#departmentSelect").html(selectContent);
+						 
+						 layui.use(['form', 'layer'], function() {
+						 	var form = layui.form;
+						
+						 	//监听提交
+						 	form.on('submit(submit)', function(data) {
+								var dId = $("#departmentSelect option:selected").attr("id");
+								console.log(dId);
+								data.field["dId"] = dId;
+						 		//向后台发送ajax请求
+								$.ajax({
+						 			//编写json格式，设置属性和值
+									
+						 			url: serverUrl + "/sysUsers/addNewSysUser",
+						 			contentType: "application/json;charset=utf-8",
+						 			data: JSON.stringify(data.field),
+									
+						 			dataType: "json",
+						 			type: "post",
+						 			success: function(data) {
+										console.log(data.field);
+						 				console.log(data);
+						 				if (data.code == 200) {
+						 					layer.msg(data.msg, {
+						 						icon: 5,
+						 						time: 2000
+						 					});
+						 					return false;
+						 				} else {
+						 					layer.msg(data.msg, {
+						 						icon: 1,
+						 						time: 1000
+						 					});
+						 					setTimeout(function() {
+						 						window.parent.location.reload();
+						 						var index = parent.layer.getFrameIndex(window.name);
+						 						parent.layer.close(index);
+						 					}, 1000);
+						 					return true;
+						 				}
+						 			}
+						 		})
+						 		return false;
+						 	});
+							
+							// 监听编辑
+							form.on('submit(edit)', function(data) {
+								var dId = $("#departmentSelect option:selected").attr("id");
+								console.log(dId);
+								data.field["dId"] = dId;
+								//向后台发送ajax请求
+								$.ajax({
+									//编写json格式，设置属性和值
+									
+									url: serverUrl + "/sysUsers/updateSysUser",
+									contentType: "application/json;charset=utf-8",
+									data: JSON.stringify(data.field),
+									
+									dataType: "json",
+									type: "post",
+									success: function(data) {
+										console.log(data.field);
+										console.log(data);
+										if (data.code == 200) {
+											layer.msg(data.msg, {
+												icon: 5,
+												time: 2000
+											});
+											return false;
+										} else {
+											layer.msg(data.msg, {
+												icon: 1,
+												time: 1000
+											});
+											setTimeout(function() {
+												window.parent.location.reload();
+												var index = parent.layer.getFrameIndex(window.name);
+												parent.layer.close(index);
+											}, 1000);
+											return true;
+										}
+									}
+								})
+								return false;
+							});
+						 });
+					}
+				}
+			});
 		</script>
 	</body>
 </html>

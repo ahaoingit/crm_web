@@ -9,6 +9,10 @@
 		<title></title>
 		<link rel="stylesheet" href="../../component/pear/css/pear.css" />
 		<link rel="stylesheet" href="../../component/layui/css/layui.css" />
+		<script src="../../component/layui/layui.js"></script>
+		<script src="../../component/pear/pear.js"></script>
+		<script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/My97DatePicker/WdatePicker.js" type="text/javascript" charset="utf-8"></script>
 		<style>
 			.layui-form{
 				margin-top: 30px;
@@ -51,8 +55,11 @@
 		  <div class="layui-form-item">
 		    <label class="layui-form-label">签单日期</label>
 		    <div class="layui-input-block">
-		      <input type="text" name="contract_date" id="contract_date" required  lay-verify="required" placeholder="请输入签单日期" autocomplete="off" class="layui-input">
-		    </div>
+		      <!-- <input type="text" name="contract_date" id="contract_date" required  lay-verify="required" placeholder="请输入签单日期" autocomplete="off" class="layui-input"> -->
+		    <input type="text"  name="contract_date" id="timeVal" style="width: 140px; padding-left: 5px;margin-left: -110px;height: 30px;" onclick="WdatePicker({lang:'en',dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})">
+		    		    <img onclick="WdatePicker({el:'timeVal',lang:'en',dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})" src="../../js/My97DatePicker/skin/calendar.png"
+		    		    height="40px" align="absmiddle" style="cursor:pointer;margin: 0px 8px 0px -10px;">
+			</div>
 		  </div>
 		  
 		  <div class="layui-form-item">
@@ -90,9 +97,7 @@
 		  </div>
 		</form>
 		 
-		 <script src="../../component/layui/layui.js"></script>
-		 <script src="../../component/pear/pear.js"></script>
-		 <script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		
 		 
 		<script>
 		//Demo
