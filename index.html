@@ -76,16 +76,16 @@
 				var admin = layui.admin,
 					$ = layui.jquery;
 					convert = layui.convert;
-				
+
 				var image = new Image();
 				image.src = "admin/images/avatar.jpg";
 				image.onload = function(){
 					$(".layui-nav-img").attr("src", convert.imageToBase64(image));
 				}
 
-				// 重新设置配置文件读取路径，默认为同级目录下的 pear.config.json
+				// 重新设置配置文件读取路径，默认为同级目录下的 pear.config.json 后端渲染导航
 				admin.setConfigPath("config/pear.config.json");
-				
+
 				// 进行框架初始化
 				admin.render();
 			})
