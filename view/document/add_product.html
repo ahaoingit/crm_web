@@ -34,89 +34,161 @@
 	</head>
 	<body>
 		<form class="layui-form" action="">
-		  <div class="layui-form-item">
-		    <label class="layui-form-label">产品名称</label>
-		    <div class="layui-input-block">
-		      <input type="text" name="pname" id="pname" required  lay-verify="required" placeholder="请输入产品名称" autocomplete="off" class="layui-input">
-		    </div>
-		  </div>
-		  
-		  <div class="layui-form-item">
-		    <label class="layui-form-label">创建人</label>
-		    <div class="layui-input-block">
-		      <input type="text" name="pCreatePerson" id="pCreatePerson" required  lay-verify="required" placeholder="请输入创建人" autocomplete="off" class="layui-input">
-		    </div>
-		  </div>
-		  
-		  
-		  
-		  <div class="layui-form-item">
-		    <label class="layui-form-label">创建日期</label>
-		    <div class="layui-input-block">
-		      <!-- <input type="text" name="pCreateTime" id="pCreatePerson" required  lay-verify="required" placeholder="请输入创建时间" autocomplete="off" class="layui-input"> -->
-		   <input type="text"  name="pCreateTime" id="timeVal" style="width: 140px; padding-left: 5px;margin-left: -110px;height: 30px;" onclick="WdatePicker({lang:'en',dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})">
-		   <img onclick="WdatePicker({el:'timeVal',lang:'en',dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})" src="../../js/My97DatePicker/skin/calendar.png"
-		   height="40px" align="absmiddle" style="cursor:pointer;margin: 0px 8px 0px -10px;">
+			<div class="layui-form-item">
+				<label class="layui-form-label">产品名称</label>
+				<div class="layui-input-block">
+					<input type="text" name="pname" id="pname" required lay-verify="required" placeholder="请输入产品名称" autocomplete="off"
+					 class="layui-input">
+				</div>
 			</div>
-		  </div>
-		  
-		  
 
-		  <div class="layui-form-item">
-		    <div class="layui-input-block">
-		      <button class="layui-btn submit_btn" lay-submit lay-filter="formDemo">立即提交</button>
-		      <button type="reset" class="layui-btn  reste_btn">重置</button>
-		    </div>
-		  </div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">创建人</label>
+				<div class="layui-input-block" id="inputPerson">
+					<!-- <input type="text" name="pCreatePerson"  id="pCreatePerson" required  lay-verify="required" placeholder="请输入创建人" autocomplete="off" class="layui-input"> -->
+				</div>
+			</div>
+
+
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">创建日期</label>
+				<div class="layui-input-block">
+					<!-- <input type="text" name="pCreateTime" id="pCreatePerson" required  lay-verify="required" placeholder="请输入创建时间" autocomplete="off" class="layui-input"> -->
+					<input type="text" name="pCreateTime" id="timeVal" style="width: 250px;height: 30px;" onclick="WdatePicker({lang:'en',dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})">
+					<img onclick="WdatePicker({el:'timeVal',lang:'en',dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})" src="../../js/My97DatePicker/skin/calendar.png"
+					 height="40px" align="absmiddle" style="cursor:pointer;margin: 0px 8px 0px -10px;">
+				</div>
+			</div>
+
+
+
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn submit_btn" lay-submit lay-filter="formDemo">立即提交</button>
+					<button type="reset" class="layui-btn  reste_btn">重置</button>
+				</div>
+			</div>
 		</form>
-		 
-		 <script src="../../component/layui/layui.js"></script>
-		 <script src="../../component/pear/pear.js"></script>
-		 <script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-		 
+
+		<script src="../../component/layui/layui.js"></script>
+		<script src="../../component/pear/pear.js"></script>
+		<script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+
 		<script>
-		//Demo
-		layui.use(['form','layer'], function(){
-		  var form = layui.form;
-		  
-		  //监听提交
-		  form.on('submit(formDemo)', function(data){
-		    // layer.msg(JSON.stringify(data.field));
+			//初始化input
 			$.ajax({
-			    //编写json格式，设置属性和值
-			    url:serverUrl+"/product/addNewProduct",
-			    contentType:"application/json;charset=utf-8",
-			    data:JSON.stringify(data.field),
-			    dataType:"json",
-			    type:"post",
-			    success: function(data) {
-			    	console.log(data);
-			    	if (data.code == 200) {
-			    		layer.msg(data.msg, {
-			    			icon: 5,
-			    			time: 2000
-			    		});
-			    		return false;
-			    	} else {
-			    		layer.msg(data.msg, {
-			    			icon: 1,
-			    			time: 1000
-			    		});
-			    		setTimeout(function() {
-			    			window.parent.location.reload();
-			    			var index = parent.layer.getFrameIndex(window.name);
-			    			parent.layer.close(index);
-			    		}, 1000);
-			    		return true;
-			    		
-			    		
-			    	}
-			    }
-			})
-			parent.layer.close();
-		    return false;
-		  });
-		});
+				url: serverUrl + "/product/addNewProduct",
+				contentType: "application/json;charset=utf-8",
+				dataType: "json",
+				type: "post",
+				success: function(data) {
+					if (data.code === 1) {
+						var sysUser = data.data;
+						var input = " ";
+						input +=
+							`<input type="text" class="layui-input pCreatePerson" name="pCreatePerson"  id=${sysUser.sysUserId} required  lay-verify="required" placeholder="请输入创建人" autocomplete="off" >`
+						$("#inputPerson").html(input);
+						layui.use(['form', 'layer'], function() {
+							var form = layui.form;
+
+							//监听提交
+							form.on('submit(formDemo)', function(data) {
+								// layer.msg(JSON.stringify(data.field));
+
+								var pCreatePerson = $(".pCreatePerson").attr("id");
+								data.field["pCreatePerson"] = pCreatePerson;
+								console.log(pCreatePerson);
+								$.ajax({
+									//编写json格式，设置属性和值
+
+									url: serverUrl + "/product/addNewProduct",
+									contentType: "application/json;charset=utf-8",
+									data: JSON.stringify(data.field),
+									dataType: "json",
+									type: "post",
+									success: function(data) {
+										console.log(data);
+										if (data.code == 200) {
+											layer.msg(data.msg, {
+												icon: 5,
+												time: 2000
+											});
+											return false;
+										} else {
+											layer.msg(data.msg, {
+												icon: 1,
+												time: 1000
+											});
+											setTimeout(function() {
+												window.parent.location.reload();
+												var index = parent.layer.getFrameIndex(window.name);
+												parent.layer.close(index);
+											}, 1000);
+											return true;
+
+
+										}
+									}
+								})
+								parent.layer.close();
+								return false;
+							});
+						});
+
+					}
+				}
+			});
+
+
+
+			//Demo
+			// layui.use(['form','layer'], function(){
+			//   var form = layui.form;
+
+			//   //监听提交
+			//   form.on('submit(formDemo)', function(data){
+			//     // layer.msg(JSON.stringify(data.field));
+
+			// 	var pCreatePerson = $("#pCreatePerson").attr("id");
+			// 	data.field["pCreatePerson"] = pCreatePerson;
+			// 	$.ajax({
+			// 	    //编写json格式，设置属性和值
+
+
+			// 		url:serverUrl+"/product/addNewProduct",
+			// 	    contentType:"application/json;charset=utf-8",
+			// 	    data:JSON.stringify(data.field),
+			// 	    dataType:"json",
+			// 	    type:"post",
+			// 	    success: function(data) {
+			// 	    	console.log(data);
+			// 	    	if (data.code == 200) {
+			// 	    		layer.msg(data.msg, {
+			// 	    			icon: 5,
+			// 	    			time: 2000
+			// 	    		});
+			// 	    		return false;
+			// 	    	} else {
+			// 	    		layer.msg(data.msg, {
+			// 	    			icon: 1,
+			// 	    			time: 1000
+			// 	    		});
+			// 	    		setTimeout(function() {
+			// 	    			window.parent.location.reload();
+			// 	    			var index = parent.layer.getFrameIndex(window.name);
+			// 	    			parent.layer.close(index);
+			// 	    		}, 1000);
+			// 	    		return true;
+
+
+			// 	    	}
+			// 	    }
+			// 	})
+			// 	parent.layer.close();
+			//     return false;
+			//   });
+			// });
 		</script>
 	</body>
 </html>

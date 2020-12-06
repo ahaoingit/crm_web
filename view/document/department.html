@@ -77,7 +77,7 @@
 					parseData: function(res) { //res 即为原始返回的数据
 						return {
 							"code": 0,
-							"data": res.data,
+							"data": convertNum(res.data),
 							"count": res.count,
 						};
 					},
@@ -103,11 +103,19 @@
 							}, {
 								field: 'dRank',
 								title: '部门等级',
-								width: 300,
+								width: 200,
 								sort: true,
 								edit: 'text'
 
-							}, {
+							},
+							{
+								field: 'dParentId',
+								title: '父级部门',
+								width: 200,
+								sort: true,
+								edit: 'text'
+							},
+							{
 
 								title: '操作 ',
 								// width: 300,
@@ -146,12 +154,49 @@
 							}
 							break;
 						case 'delete':
-							if (data.length === 0) {
-								layer.msg('请选择一行');
-							} else {
-								layer.msg('删除');
-							}
-							break;
+						checkData = checkStatus.data;
+						var delList = [];
+						     
+						for (var i = 0; i < checkData.length; i++) {
+							delList.push(checkData[i].did);
+						}
+						console.log(delList);
+						if (data.length === 0) {
+							layer.msg('请选择一行');
+						} else {
+							layer.confirm('确定批量删除吗？', function(index) {
+								layer.close(index);
+								$.ajax({
+									type: 'post',
+									dataType: 'json',
+									contentType: "application/json;charset=utf-8",
+									 data: JSON.stringify(delList),
+									url: serverUrl + '/department/deleteAll',
+									// data: {
+									// 	ids: delList
+									// },
+									success: function(res) {
+										if (res.status == 200) {
+											layer.msg('失败', {
+												icon: 2,
+												time: 1000
+											});
+										} else {
+						
+											layer.msg('删除成功', {
+												icon:1,
+												time: 1000
+											}, function() {
+												
+												window.location.reload();
+											})
+										}
+									}
+								});
+						
+							});
+						}
+						break;
 					};
 				});
 
