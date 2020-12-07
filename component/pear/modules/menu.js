@@ -132,15 +132,16 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 			isHoverMenu(true, config);
 		}
 	}
-	
+	//请求数据接口
 	function getData(url){
 	    var defer = $.Deferred();
-		$.get(url+"?fresh=" + Math.random(), function(result) {
+	    //url+"?fresh=" + Math.random()  删除
+		$.get(url+"?fresh=" + Math.random()+"&Token="+selectToken(), function(result) {
 			 defer.resolve(result)
 		});
 	    return defer.promise();
 	}
-	
+
 	function renderMenu(option){
 		if (option.parseData != false) {
 			option.parseData(option.data);
@@ -184,7 +185,7 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 					'" menu-title="' + item.title + '"  href="' + href + '"  ' + target + '><i class="' + item.icon +
 					'"></i><span>' + item.title + '</span></a>';
 			}
-			// 调 用 递 归 方 法 加 载 无 限 层 级 的 子 菜 单 
+			// 调 用 递 归 方 法 加 载 无 限 层 级 的 子 菜 单
 			content += loadchild(item);
 			// 结 束 一 个 根 菜 单 项
 			content += '</li>';
@@ -220,9 +221,9 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 					'" class="layui-nav-item"><a href="#">' + item.title + '</a></li>';
 				menuItem = '<ul style="display:none" pear-id="' + item.id + '" lay-filter="' + option.elem +
 					'" class="layui-nav arrow layui-nav-tree pear-nav-tree">';
-					
+
 				controlItemPe += '<dd pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +'"><a href="javascript:void(0);">'+ item.title +'</a></dd>';
-					
+
 			}
 			index++;
 			$.each(item.children, function(i, note) {
@@ -283,7 +284,7 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 		}
 		// 创 建 子 菜 单 结 构
 		var content = '<dl class="layui-nav-child">';
-		// 如 果 嵌 套 不 等 于 空 
+		// 如 果 嵌 套 不 等 于 空
 		if (obj.children != null && obj.children.length > 0) {
 			// 遍 历 子 项 目
 			$.each(obj.children, function(i, note) {
@@ -327,7 +328,7 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 				var superEle = $(this).parent();
 				var ele = $(this).next('.layui-nav-child');
 				var heights = ele.children("dd").length * 48;
-				
+
 				if ($(this).parent().is(".layui-nav-itemed")) {
 					if (option.accordion) {
 						$(this).parent().parent().find(".layui-nav-itemed").removeClass("layui-nav-itemed");
@@ -361,18 +362,18 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 		if (b) {
 			$("#" + option.elem + ".pear-nav-mini .layui-nav-item,#" + option.elem + ".pear-nav-mini dd").hover(function() {
 				$(this).children(".layui-nav-child").addClass("layui-nav-hover");
-				
+
 				var top = $(this).offset().top + 5;
 				var y = window.document.body.clientHeight;
-				
+
 				var height = $(window).height();
-				
+
 				var topLength = $(this).offset().top;
-				
+
 				var thisHeight = $(this).children(".layui-nav-child").height();
-				
+
 				if((thisHeight+topLength)>height){
-				      topLength = height-thisHeight-10;	
+				      topLength = height-thisHeight-10;
 				}
 				if (!$(this).is(".layui-nav-item")) {
 					var left = $(this).offset().left + $(this).width()+2;

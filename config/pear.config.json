@@ -4,10 +4,10 @@
 		"image": "admin/images/logo.png"
 	},
 	"menu": {
-		"data": "admin/data/menu.json",
+		"data": "http://127.0.0.1:8099/sysUsers/getMenus",
 		"accordion": true,
 		"control": false,
-		"select": "1",
+		"select": "0",
 		"async": true
 	},
 	"tab": {
@@ -15,8 +15,8 @@
 		"keepState": true,
 		"tabMax": 30,
 		"index": {
-			"id": "1",
-			"href": "view/document/gonghai.html",
+			"id": "0",
+			"href": "view/console/console2.html",
 			"title": "首页"
 		}
 	},
