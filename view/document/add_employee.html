@@ -35,7 +35,7 @@
 			<div class="layui-form-item" hidden>
 				<label class="layui-form-label">员工Id</label>
 				<div class="layui-input-block">
-					<input type="text" name="sysUserId" id="sysUserId" required lay-verify="required" placeholder="请输入客户名称"
+					<input type="text" name="sysUserId" id="sysUserId"  placeholder=""
 					 autocomplete="off" class="layui-input">
 				</div>
 				</div>
@@ -101,10 +101,13 @@
 
 
 		<script>
-			// init select	
+			// init selects
 			$.ajax({
 				url: serverUrl + "/department/showAllDepartment",
 				contentType: "application/json;charset=utf-8",
+				headers:{
+					"Token":selectToken()
+				},
 				dataType: "json",
 				type: "post",
 				success: function(data) {
@@ -123,17 +126,19 @@
 						
 						 	//监听提交
 						 	form.on('submit(submit)', function(data) {
+								
 								var dId = $("#departmentSelect option:selected").attr("id");
 								console.log(dId);
 								data.field["dId"] = dId;
 						 		//向后台发送ajax请求
 								$.ajax({
 						 			//编写json格式，设置属性和值
-									
+									headers:{
+										"Token":selectToken()
+									},
 						 			url: serverUrl + "/sysUsers/addNewSysUser",
 						 			contentType: "application/json;charset=utf-8",
-						 			data: JSON.stringify(data.field),
-									
+						 			data: JSON.stringify(data.field),	
 						 			dataType: "json",
 						 			type: "post",
 						 			success: function(data) {
@@ -144,6 +149,11 @@
 						 						icon: 5,
 						 						time: 2000
 						 					});
+											setTimeout(function() {
+												window.parent.location.reload();
+												var index = parent.layer.getFrameIndex(window.name);
+												parent.layer.close(index);
+											}, 1000);
 						 					return false;
 						 				} else {
 						 					layer.msg(data.msg, {
@@ -164,6 +174,7 @@
 							
 							// 监听编辑
 							form.on('submit(edit)', function(data) {
+								
 								var dId = $("#departmentSelect option:selected").attr("id");
 								console.log(dId);
 								data.field["dId"] = dId;
@@ -173,20 +184,17 @@
 									
 									url: serverUrl + "/sysUsers/updateSysUser",
 									contentType: "application/json;charset=utf-8",
-									data: JSON.stringify(data.field),
 									
+									data: JSON.stringify(data.field),
 									dataType: "json",
 									type: "post",
+									
 									success: function(data) {
 										console.log(data.field);
 										console.log(data);
 										if (data.code == 200) {
-											layer.msg(data.msg, {
-												icon: 5,
-												time: 2000
-											});
-											return false;
-										} else {
+											
+											
 											layer.msg(data.msg, {
 												icon: 1,
 												time: 1000
@@ -197,6 +205,12 @@
 												parent.layer.close(index);
 											}, 1000);
 											return true;
+										} else {
+											layer.msg(data.msg, {
+												icon: 5,
+												time: 2000
+											});
+											return false;
 										}
 									}
 								})

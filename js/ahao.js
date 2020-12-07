@@ -1,9 +1,7 @@
-
 /**
  * @author ahao
  * @type {string}
  */
-
 const serverUrl = "http://127.0.0.1:8099";
 //token 前端处理业务
 //保存token
