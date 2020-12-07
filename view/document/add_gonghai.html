@@ -27,7 +27,7 @@
 				margin-top: 20px;
 				text-align: center;
 			}
-			.submit_btn,.reste_btn {
+			.submit_btn,.edit_btn {
 				margin-top: 30px;
 
 			}
@@ -45,6 +45,13 @@
 		<form class="layui-form" action="">
 			<ul class="left">
 				<li>
+					<div class="layui-form-item" hidden>
+						<label class="layui-form-label">客户Id</label>
+						<div class="layui-input-block">
+							<input type="text" name="cid" id="cid" required lay-verify="required" placeholder="请输入客户名称"
+							 autocomplete="off" class="layui-input">
+						</div>
+						</div>
 					<div class="layui-form-item">
 						<label class="layui-form-label">联系人名称</label>
 						<div class="layui-input-block">
@@ -93,7 +100,7 @@
 					<div class="layui-form-item">
 						<label class="layui-form-label">客户来源</label>
 						<div class="layui-input-block">
-							<select class="source" name="city" lay-verify="required">
+							<select class="source" name="source" lay-verify="required">
 								<option value=""></option>
 								<option value="0">电话营销</option>
 								<option value="1">线上注册</option>
@@ -169,7 +176,8 @@
 			<div class="layui-form-item">
 				<div class="layui-input-block">
 					<button class="layui-btn submit_btn" lay-submit lay-filter="formDemo">立即提交</button>
-					<button type="reset" class="layui-btn  reste_btn">重置</button>
+					<!-- <button type="reset" class="layui-btn  reste_btn">重置</button> -->
+					<button class="layui-btn edit_btn" lay-submit lay-filter="edit">保存修改</button>
 				</div>
 			</div>
 
@@ -215,6 +223,12 @@
 							})
 						}
 					})
+				});
+				
+				
+				// 监听编辑
+				form.on('submit(edit)', function(data) {
+					
 				});
 			});
 		</script>

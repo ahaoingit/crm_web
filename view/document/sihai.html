@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title></title>
+		<title>私海</title>
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -46,9 +46,7 @@
 
 			</form>
 
-			<!-- <button class="layui-btn layui-btn-normal add_btn" lay-event="add_btn" id="add_btn"><i class="layui-icon"></i>新增用户</button>
-			<button class="layui-btn layui-btn-danger delAll_btn" onclick=""><i class="layui-icon"></i>批量删除</button>
-			<button class="layui-btn layui-btn-warm change_btn" onclick=""><i class="layui-icon"></i>批量转公海</button> -->
+
 		</div>
 
 		<!-- 数据表格 -->
@@ -57,7 +55,7 @@
 
 
 		</div>
-		
+
 
 
 		<script src="../../component/layui/layui.js"></script>
@@ -69,12 +67,9 @@
 
 			<div class="layui-btn-container">
 		    
-			<button class="layui-btn layui-btn-normal add_btn" lay-event="add_btn" id="add_btn"><i class="layui-icon"></i>新增客户</button>
-			<button class="layui-btn layui-btn-danger delAll_btn" onclick=""><i class="layui-icon"></i>批量删除</button>
-			<button class="layui-btn layui-btn-warm change_btn" onclick=""><i class="layui-icon"></i>批量转公海</button>
-			<button class="layui-btn layui-btn-md" lay-event="getCheckData">获取选中行数据</button>
-			<button class="layui-btn layui-btn-md" lay-event="getCheckLength">获取选中数目</button>
-			<button class="layui-btn layui-btn-md" lay-event="isAll">验证是否全选</button>
+			<button class="layui-btn layui-btn-normal add_btn" lay-event="add_btn" id="add_btn">新增客户</button>
+			<button class="layui-btn layui-btn-danger delAll_btn" lay-event="delAll_btn" onclick="">批量删除</button>
+			<button class="layui-btn layui-btn-warm change_btn" lay-event="change_btn" onclick="">批量转公海</button>
 			
 			
 		  </div>
@@ -82,44 +77,48 @@
 
 		<!-- 对数据进行的操作 -->
 		<script type="text/html" id="barDemo">
-		
-			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-		  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+			<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="detail">查看</a>			  
+					<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+					<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 		</script>
 		<script>
 			layui.use(["table", "laypage", 'element', 'jquery', 'layer'], function() {
 				var table = layui.table;
 
 				table.render({
+					headers: {
+						"Token": selectToken()
+					},
 					elem: '#test',
-					url: serverUrl + '/client/showClientOfPrivate',
+					url: serverUrl + '/client/findClientOfPrivateForPage',
 					toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
 					parseData: function(res) { //res 即为原始返回的数据
 						return {
 							"code": 0,
-							"data": res.data
+							"data": res.data,
+							"count":res.count,
 						};
 					},
+					page: true,
 					defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
 						title: '提示',
 						layEvent: 'LAYTABLE_TIPS',
 						icon: 'layui-icon-tips'
 					}],
-					title: 'userListTable',
+					title: 'PublicClient',
 					cols: [
 						[{
 								type: 'checkbox',
-								width: 80,
-								
+								width: 60,
+
 							}, {
 								field: 'cid',
-								title: '客户id',
-								width: 100
+								title: '序号',
+								width: 80
 							}, {
 								field: 'contactsName',
 								title: '联系人名称',
-								width: 180,
-								fixed: 'left',
+								width: 130,
 								unresize: true,
 								sort: true
 							},
@@ -128,70 +127,76 @@
 								title: '客户名称',
 								width: 230
 							},
+							// {
+							// 	field: 'position',
+							// 	title: '职务',
+							// 	width: 180,
+							// 	edit: 'text'
+							// },
 							{
-								field: 'position',
-								title: '职务',
-								width: 180,
-								edit: 'text'
-							}, {
 								field: 'industry',
 								title: '行业',
-								width: 180,
+								width: 130,
 								edit: 'text'
-							}
-
-							, {
-								field: 'address',
-								title: '地址',
-								width: 230,
-								edit: 'text',
-								sort: true
-							}, {
+							},
+							// {
+							// 	field: 'address',
+							// 	title: '地址',
+							// 	width: 230,
+							// 	edit: 'text',
+							// 	sort: true
+							// },
+							{
 								field: 'cSource',
 								title: '客户来源',
-								width: 180
-							}, {
-								field: 'cNotes',
-								title: '备注',
-								width: 180
-							}, {
+								width: 130
+							},
+							//  {
+							// 	field: 'cNotes',
+							// 	title: '备注',
+							// 	width: 180
+							// },
+							{
 								field: 'phone',
 								title: '手机号码',
-								width: 180
+								width: 160
 							},
+							// {
+							// 	field: 'tel',
+							// 	title: '固定电话',
+							// 	width: 180,
+							// 	edit: 'text'
+							// },
+							// {
+							// 	field: 'website',
+							// 	title: '网站',
+							// 	width: 230,
+							// 	edit: 'text'
+							// }
 							{
-								field: 'tel',
-								title: '固定电话',
-								width: 180,
-								edit: 'text'
-							},
-							{
-								field: 'website',
-								title: '网站',
-								width: 230,
-								edit: 'text'
-							}, {
 								field: 'wechatName',
 								title: '微信',
-								width: 180
-							}
+								width: 160
+							},
+							{
 
-
-							, {
-								fixed: 'right',
 								title: '操作',
+								align: 'center',
 								toolbar: '#barDemo',
 								width: 230
 							}
 						]
-					],
-					page: true
+					]
+
+
 				});
-				
+
 				//头工具栏事件
 				table.on('toolbar(test)', function(obj) {
-					var checkStatus = table.checkStatus(obj.config.id);
+					var checkStatus = table.checkStatus(obj.config.id),
+						data = checkStatus.data;
 					switch (obj.event) {
+						// 新增客户
 						case 'add_btn':
 
 							layer.open({
@@ -201,22 +206,52 @@
 								shade: 0.8,
 								area: ['1000px', '90%'],
 								shadeClose: false,
-								content: 'add_sihai.html' //iframe的url	
+								content: 'add_sihai.html' //iframe的url
 							});
-							//input above
 							break;
-						case 'getCheckData':
-							var data = checkStatus.data;
-							layer.alert(JSON.stringify(data));
-							break;
-						case 'getCheckLength':
-							var data = checkStatus.data;
-							layer.msg('选中了：' + data.length + ' 个');
-							break;
-						case 'isAll':
-							layer.msg(checkStatus.isAll ? '全选' : '未全选');
+							// 批量删除
+						case 'delAll_btn':
 							break;
 
+							// 公海转私海
+						case 'change_btn':
+							checkData = checkStatus.data;
+							var list = [];
+
+							for (var i = 0; i < checkData.length; i++) {
+								list.push(checkData[i].cid);
+							}
+							console.log(list);
+							if (data.length === 0) {
+								layer.msg('请选择一行');
+							} else {
+								layer.confirm('确定转成私海客户吗？', function(index) {
+									layer.close(index);
+									$.ajax({
+										type: 'post',
+										dataType: 'json',
+										contentType: "application/json;charset=utf-8",
+										url: serverUrl + '/SysUserClient/changeClientToPublic',
+										data: JSON.stringify(list),
+										success: function(res) {
+											if (res.status == 200) {
+												layer.msg('转公海客户失败', {
+													icon: 2,
+													time: 1000
+												});
+											} else {
+												layer.msg('已成功转为公海客户', {
+													icon: 1,
+													time: 1000
+												}, function() {
+													 window.location.reload();
+												})
+											}
+										}
+									})
+								});
+							}
+							break;
 							//自定义头工具栏右侧图标 - 提示
 						case 'LAYTABLE_TIPS':
 							layer.alert('这是工具栏右侧自定义的一个图标按钮');
@@ -225,69 +260,63 @@
 				});
 
 				//监听行工具事件
-				table.on('tool(test)', function(obj) {
-					var data = obj.data;
-					//console.log(obj)
-					if (obj.event === 'del') {
-						layer.confirm('真的删除行么', function(index) {
-							obj.del();
+				table.on('tool(test)', function(obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+					var data = obj.data //获得当前行数据
+						,
+						layEvent = obj.event; //获得 lay-event 对应的值
+					if (layEvent === 'detail') {
+						// layer.msg('查看操作');
+						layer.alert('序号:' + data.cid + '<br>联系人名称:' + data.contactsName + '<br>客户名称：' + data.cname +
+							'<br>手机号:' + data.phone + '<br>职务:' + data.position + '<br>行业:' + data.industry + '<br>客户来源:' + data.source +
+							'<br>地址:' + data.address + '<br>备注:' + data.cNotes + '<br>固定电话:' + data.tel + '<br>网站:' + data.website +
+							'<br>邮箱:' + data.email + '<br>微信:' + data.wechatName);
+
+					} else if (layEvent === 'del') {
+						layer.confirm('真的删除ID为：' + data.cid + "的客户吗?", function(index) {
+							obj.del(); //删除对应行（tr）的DOM结构
 							layer.close(index);
+							//向服务端发送删除指令
 						});
-					} else if (obj.event === 'edit') {
-						layer.prompt({
-							formType: 2,
-							value: data.email
-						}, function(value, index) {
-							obj.update({
-								email: value
-							});
-							layer.close(index);
+
+
+					} else if (layEvent === 'edit') {
+						layer.open({
+							type: 2,
+							title: '<h1 style="font-size: 25px;text-align: center">编辑私海客户</h1>',
+							shadeClose: true,
+							shade: 0.6,
+							area: ['1100px', '85%'],
+							shadowColor: false,
+							content: 'add_sihai.html',
+							success: function(layero, index) {
+								//方法一：body.html() body里面的内容
+								var body = layer.getChildFrame('body', index);
+								//给用户id赋值
+								body.find('#cid').val(data.cid);
+								body.find('#contactsName').val(data.contactsName);
+								body.find('#cname').val(data.cname);
+								body.find('#email').val(data.email);
+								body.find('#phone').val(data.phone);
+								body.find('#position').val(data.position);
+								body.find('#industry').val(data.industry);
+								body.find('#position').val(data.position);
+								body.find('#address').val(data.address);
+								body.find('#cNotes').val(data.cNotes);
+								body.find('#tel').val(data.tel);
+								body.find('#website').val(data.website);
+								body.find('#wechatName').val(data.wechatName);
+								//下拉框赋值
+								body.find('[name="source"]').val(data.city);
+
+
+								//方法二：获取的子页面的 div
+								var div = layero.find('iframe').contents();
+
+								div.find('#cusManager').val(data.cusManager);
+							}
 						});
 					}
 				});
-
-			
-
-				// 批量删除
-				// $(".delAll_btn").click(function () {
-				//     var checkStatus = table.checkStatus('userListTable'),
-				//         data = checkStatus.data,
-				//         userId = "";
-				//     if (data.length > 0) {
-				//         for (var i in data) {
-				//             userId += data[i].id + ",";
-				//         }
-				//         console.log(userId);
-				//         layer.confirm('确定删除选中的用户？', {icon: 3, title: '提示信息'}, function (index) {
-				//             $.post('/###', {ids: userId}, function (data) {
-				//                 layer.msg(data.msg);
-				//                 tableIns.reload();
-				//                 layer.close(index);
-				//             });
-				//         })
-				//     } else {
-				//         layer.msg("请选择需要删除的用户");
-				//     }
-				// }); 
-
-				// // 搜索
-				// $('.search_btn').click(function () {
-				//   var inputVal = $('.layui-input').val()
-				//   table.reload('testReload', {
-				//   url: 'https://www.easy-mock.com/mock/5c131015dada7b27ac3a5c36/titi/noData'
-				//   // ,methods:"post"
-				//   ,request: {
-				//    pageName: 'page' //页码的参数名称，默认：page
-				//    ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
-				//   }
-				//   ,where: {
-				//    query : inputVal
-				//   }
-				//   ,page: {
-				//    curr: 1
-				//   }
-				//   });
-				//  })
 
 			});
 		</script>

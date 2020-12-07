@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-		<title>layui在线调试</title>
+		<title>员工管理</title>
 		<link rel="stylesheet" href="../../component/pear/css/pear.css" />
 		<link rel="stylesheet" href="../../component/layui/css/layui.css" />
 		<script src="../../component/layui/layui.js"></script>
@@ -89,12 +89,14 @@
 
 				//执行一个 table 实例
 				table.render({
+					headers:{
+						"Token":selectToken()
+						},
 					elem: '#demo',
 					height: 420,
 					url: serverUrl + "/sysUsers/findSysUserForPage", //数据接口
 					title: 'employee',
-					page: true //开启分页
-						,
+					page: true ,//开启分页	
 					toolbar: 'default', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
 					parseData: function(res) { //res 即为原始返回的数据
 						return {
@@ -137,10 +139,10 @@
 								title: '加入时间',
 								width: 180,
 								sort: true,
-								// templet: function(data) {
-								// 	return util.toDateString(data.create_time * 1000, 'yyyy-MM-dd');
-								// },
-								templet : "<div>{{layui.util.toDateString(d.ordertime, 'yyyy-MM-dd')}}</div>"
+								templet: function(data) {
+									return util.toDateString(data.joinTime, 'yyyy-MM-dd');
+								},
+								// templet : "<div>{{layui.util.toDateString(d.ordertime, 'yyyy-MM-dd')}}</div>"
 							}, {
 								field: 'password',
 								title: '密码',
@@ -214,9 +216,13 @@
 								layer.confirm('确定批量删除吗？', function(index) {
 									layer.close(index);
 									$.ajax({
+										
 										type: 'post',
 										dataType: 'json',
 										contentType: "application/json;charset=utf-8",
+										headers:{
+											"Token":selectToken()
+											},
 										data: JSON.stringify(delList),
 										url: serverUrl + '/sysUsers/deleteAll',
 										// data: {
@@ -235,7 +241,7 @@
 													time: 1000
 												}, function() {
 
-													// window.location.reload();
+													 window.location.reload();
 												})
 											}
 										}
@@ -261,6 +267,9 @@
 							$.ajax({
 								url: serverUrl + "/sysUsers/deleteCurrUser",
 								type: 'get',
+								headers:{
+									"Token":selectToken()
+								},
 								data: {
 									'sysUserId': data.sysUserId
 								}, //向服务端发送删除的id
@@ -291,7 +300,7 @@
 						    title: '<h1 style="font-size: 25px;text-align: center">编辑用户</h1>',
 						    shadeClose: true,
 						    shade: 0.6,
-						    area: ['1100px', '75%'],
+						    area: ['580px', '85%'],
 						    shadowColor: false,
 						    content: 'add_employee.html',
 						    success: function (layero, index) {
@@ -302,10 +311,11 @@
 								body.find('#sysUserName').val(data.sysUserName);
 						        
 						        //下拉框赋值
-						        body.find('[name="dId"]').val(data.dId);
+						        body.find('[name="dId"]').val(data.departmentOne.did);
 						        body.find('#phone').val(data.phone);
 						        body.find('#email').val(data.email);
-						        body.find('#timeVal').val(data.pCreateTime);
+							
+						        body.find('#timeVal').val(util.toDateString(data.joinTime, 'yyyy-MM-dd'));
 						        body.find('#password').val(data.password);
 						        
 								//方法二：获取的子页面的 div
@@ -328,13 +338,15 @@
 					var paramJson = {};
 					paramJson["sysUserId"] = data.sysUserId;
 					paramJson[field] = value;
-					$.ajax({
-						url: serverUrl + "/sysUsers/updateSysUser",
-						contentType: "application/json;charset=utf-8",
-						data: JSON.stringify(paramJson),
-						dataType: "json",
-						type: "post",
-					})
+					myAjax("/sysUsers/updateSysUser",JSON.stringify(paramJson),"post",()=>{});
+					// $.ajax({
+						
+					// 	url: serverUrl + "/sysUsers/updateSysUser",
+					// 	contentType: "application/json;charset=utf-8",
+					// 	data: JSON.stringify(paramJson),
+					// 	dataType: "json",
+					// 	type: "post",
+					// })
 				})
 
 

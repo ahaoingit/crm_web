@@ -20,18 +20,19 @@
 			.layui-form{
 				margin-top: 50px;
 				margin-left: 30px;
-				
+
 			}
 			.layui-input-block,.layui-textarea,.source{
 				width: 300px;
 				margin-top: 20px;
 				text-align: center;
 			}
-			.submit_btn,.reste_btn {
+			.submit_btn,.edit_btn {
 				margin-top: 30px;
+				
 
 			}
-			
+
 			.left{
 				float: left;
 			}
@@ -45,6 +46,13 @@
 		<form class="layui-form" action="">
 			<ul class="left">
 				<li>
+					<div class="layui-form-item" hidden>
+						<label class="layui-form-label">客户Id</label>
+						<div class="layui-input-block">
+							<input type="text" name="cid" id="cid" required lay-verify="required" placeholder="请输入客户名称"
+							 autocomplete="off" class="layui-input">
+						</div>
+						</div>
 					<div class="layui-form-item">
 						<label class="layui-form-label">联系人名称</label>
 						<div class="layui-input-block">
@@ -93,13 +101,12 @@
 					<div class="layui-form-item">
 						<label class="layui-form-label">客户来源</label>
 						<div class="layui-input-block">
-							<select class="source" name="city" lay-verify="required">
+							<select class="source" name="source" lay-verify="required">
 								<option value=""></option>
 								<option value="0">电话营销</option>
 								<option value="1">线上注册</option>
 								<option value="2">广告渠道</option>
 								<option value="3">个人资源</option>
-
 							</select>
 						</div>
 				</li>
@@ -110,8 +117,8 @@
 				<li>
 					<div class="layui-form-item">
 						<label class="layui-form-label">地址</label>
-						<!-- <div class="layui-input-block">
-						      <input type="text" name="address" id="address" required  lay-verify="required" placeholder="请输入地址" autocomplete="off" class="layui-input">
+						<!-- <div class="layui-input-block" >
+						      <input readonly data-toggle="city-picker" type="text" name="address" id="address" required  lay-verify="required" placeholder="请输入地址" autocomplete="off" class="layui-input">
 						    </div> -->
 						<div style="position:relative;">
 							<input name="address" id="address" readonly type="text" data-toggle="city-picker" style="width: 280px;">
@@ -167,10 +174,11 @@
 			</ul>
 
 
-			<div class="layui-form-item" >
+			<div class="layui-form-item">
 				<div class="layui-input-block">
 					<button class="layui-btn submit_btn" lay-submit lay-filter="formDemo">立即提交</button>
-					<button type="reset" class="layui-btn  reste_btn">重置</button>
+					<!-- <button type="reset" class="layui-btn  reste_btn">重置</button> -->
+					<button class="layui-btn edit_btn" lay-submit lay-filter="edit">保存修改</button>
 				</div>
 			</div>
 
@@ -190,8 +198,38 @@
 
 				//监听提交
 				form.on('submit(formDemo)', function(data) {
-					layer.msg(JSON.stringify(data.field));
-					return false;
+					let param = JSON.stringify(data.field);
+					let index;
+					$.ajax({
+						beforeSend: function() {
+							index = layer.load();
+						},
+						complete: function() {
+							layer.close(index);
+						},
+						url: serverUrl + "/client/addClientOfPublic",
+						method: 'post',
+						data: data,
+						dataType: 'json',
+						headers: {
+							'Accept': 'application/json',
+							'Content-Type': 'application/json'
+						},
+						success: function(data) {
+							alert(data.msg);
+						},
+						error: function() {
+							layer.msg("内部错误!", {
+								icon: 5
+							})
+						}
+					})
+				});
+				
+				
+				// 监听编辑
+				form.on('submit(edit)', function(data) {
+					
 				});
 			});
 		</script>

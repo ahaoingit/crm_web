@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-		<title>layui在线调试</title>
+		<title>产品管理</title>
 		<link rel="stylesheet" href="../../component/pear/css/pear.css" />
 		<link rel="stylesheet" href="../../component/layui/css/layui.css" />
 		<style>
@@ -74,6 +74,9 @@
 
 				//执行一个 table 实例
 				table.render({
+					headers:{
+						"Token":selectToken()
+						},
 					elem: '#demo',
 					height: 420,
 					url: serverUrl + "/product/findProductForPage" //数据接口
@@ -178,9 +181,7 @@
 										contentType: "application/json;charset=utf-8",
 										data: JSON.stringify(delList),
 										url: serverUrl + '/product/deleteAll',
-										// data: {
-										// 	ids: delList
-										// },
+										
 										success: function(res) {
 											if (res.status == 200) {
 												layer.msg('失败', {
@@ -214,12 +215,7 @@
 					if (layEvent === 'detail') {
 						layer.msg('查看操作');
 					} else if (layEvent === 'del') {
-						// layer.confirm('真的删除行么', function(index){
-						//   obj.del(); //删除对应行（tr）的DOM结构
-						//   layer.close(index);
-						//   //向服务端发送删除指令
-						// });
-
+					
 						layer.confirm('真的删除ID为：' + data.pid + "的用户吗?", function(index) {
 
 							$.ajax({
@@ -255,10 +251,10 @@
 
 				//编辑
 				table.on('edit(test)', function(obj) {
-					var value = obj.value //得到修改后的值
-						,
-						data = obj.data //得到所在行所有键值
-						,
+					var value = obj.value, //得到修改后的值
+						
+						data = obj.data, //得到所在行所有键值
+						
 						field = obj.field; //得到字段
 					layer.msg('[ID: ' + data.pid + '] ' + field + ' 字段更改为：' + value);
 					var paramJson = {};
