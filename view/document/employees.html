@@ -93,7 +93,7 @@
 						"Token":selectToken()
 						},
 					elem: '#demo',
-					height: 420,
+					
 					url: serverUrl + "/sysUsers/findSysUserForPage", //数据接口
 					title: 'employee',
 					page: true ,//开启分页	
@@ -232,13 +232,16 @@
 											if (res.status == 200) {
 												layer.msg('失败', {
 													icon: 2,
-													time: 1000
+													time: 1000,
+													area:["60px","65px"]
+													
 												});
 											} else {
 
 												layer.msg('删除成功', {
 													icon: 1,
-													time: 1000
+													time: 1000,
+													area:["60px","65px"]
 												}, function() {
 
 													 window.location.reload();

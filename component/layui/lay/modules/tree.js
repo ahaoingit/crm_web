@@ -312,7 +312,7 @@ layui.define("form", function(e) {
 						// 			e.parents("." + s).eq(0).removeClass(C), e.parent("." + v).remove()
 						// 		}
 						// 		e.remove()
-						// 	}
+						// 	})
 						// }
 				// 
 			if ("add" == f) {

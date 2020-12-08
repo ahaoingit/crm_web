@@ -66,16 +66,8 @@
 		"type": 1,
 		"openType": "_iframe",
 		"href": "view/document/permission.html"
-	},
-{
-		"id": 9,
-		"title": "企业信息",
-		"icon": "layui-icon layui-icon-form",
-		"type": 1,
-		"openType": "_iframe",
-		"href": "view/document/enterpriseInfo.html"
 	}
-	
+
 
 	
 ]

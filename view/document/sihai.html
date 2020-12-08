@@ -147,7 +147,7 @@
 							// 	sort: true
 							// },
 							{
-								field: 'cSource',
+								field: 'sourceStr',
 								title: '客户来源',
 								width: 130
 							},
@@ -217,11 +217,11 @@
 						case 'change_btn':
 							checkData = checkStatus.data;
 							var list = [];
-
+							
 							for (var i = 0; i < checkData.length; i++) {
-								list.push(checkData[i].cid);
-							}
-							console.log(list);
+								list.push({
+									"clientCid":checkData[i].cid
+								});
 							if (data.length === 0) {
 								layer.msg('请选择一行');
 							} else {
@@ -248,14 +248,14 @@
 												})
 											}
 										}
-									})
+									});
 								});
-							}
+							}}
 							break;
 							//自定义头工具栏右侧图标 - 提示
-						case 'LAYTABLE_TIPS':
-							layer.alert('这是工具栏右侧自定义的一个图标按钮');
-							break;
+						// case 'LAYTABLE_TIPS':
+						// 	layer.alert('这是工具栏右侧自定义的一个图标按钮');
+						// 	break;
 					};
 				});
 

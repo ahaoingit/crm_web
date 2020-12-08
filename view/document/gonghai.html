@@ -25,6 +25,7 @@
 				margin-left: 10px;
 			}
 			
+			
 			}
     
   </style>
@@ -69,10 +70,12 @@
 		    
 			<button class="layui-btn layui-btn-normal add_btn" lay-event="add_btn" id="add_btn">新增客户</button>
 			<button class="layui-btn layui-btn-danger delAll_btn" lay-event="delAll_btn" onclick="">批量删除</button>
-			<button class="layui-btn layui-btn-warm change_btn" lay-event="change_btn" onclick="">批量转私海</button>
+			<button class="layui-btn layui-btn-warm change_btn" lay-event="change_btn" onclick="">公海转私海</button>
 			
 			
 		  </div>
+		  
+		  
 		</script>
 
 		<!-- 对数据进行的操作 -->
@@ -90,6 +93,7 @@
 						"Token": selectToken()
 					},
 					elem: '#test',
+					
 					url: serverUrl + '/client/findClientOfPublicForPage',
 					toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
 					parseData: function(res) { //res 即为原始返回的数据
@@ -147,7 +151,7 @@
 							// 	sort: true
 							// },
 							{
-								field: 'cSource',
+								field: 'sourceStr',
 								title: '客户来源',
 								width: 130
 							},
@@ -176,14 +180,14 @@
 							{
 								field: 'wechatName',
 								title: '微信',
-								width: 160
+								width: 150
 							},
 							{
 
 								title: '操作',
 								align: 'center',
 								toolbar: '#barDemo',
-								width: 230
+								width: 220
 							}
 						]
 					]
@@ -221,7 +225,9 @@
 							var list = [];
 
 							for (var i = 0; i < checkData.length; i++) {
-								list.push(checkData[i].cid);
+								list.push({
+									"clientCid":checkData[i].cid
+								});
 							}
 							console.log(list);
 							if (data.length === 0) {
@@ -230,7 +236,9 @@
 								layer.confirm('确定转成私海客户吗？', function(index) {
 									layer.close(index);
 									$.ajax({
-										
+										headers: {
+											"Token": selectToken()
+										},
 										type: 'post',
 										dataType: 'json',
 										contentType: "application/json;charset=utf-8",
@@ -269,10 +277,40 @@
 						layEvent = obj.event; //获得 lay-event 对应的值
 					if (layEvent === 'detail') {
 						// layer.msg('查看操作');
-						layer.alert('序号:' + data.cid + '<br>联系人名称:' + data.contactsName + '<br>客户名称：' + data.cname +
-							'<br>手机号:' + data.phone + '<br>职务:' + data.position + '<br>行业:' + data.industry + '<br>客户来源:' + data.source +
-							'<br>地址:' + data.address + '<br>备注:' + data.cNotes + '<br>固定电话:' + data.tel + '<br>网站:' + data.website +
-							'<br>邮箱:' + data.email + '<br>微信:' + data.wechatName);
+						// layer.alert('序号:' + data.cid + '<br>联系人名称:' + data.contactsName + '<br>客户名称：' + data.cname +
+						// 	'<br>手机号:' + data.phone + '<br>职务:' + data.position + '<br>行业:' + data.industry + '<br>客户来源:' + data.source +
+						// 	'<br>地址:' + data.address + '<br>备注:' + data.cNotes + '<br>固定电话:' + data.tel + '<br>网站:' + data.website +
+						// 	'<br>邮箱:' + data.email + '<br>微信:' + data.wechatName
+						// 	);
+						
+						layer.open({
+						    type: 2 ,
+						    title:  ['查看客户详情', 'background-color:#e8e8e8'],   
+						    area: ['1000px', '95%'],   //宽高
+						    shade: 0.4,   //遮罩透明度
+						    content:'editClient.html' ,//支持获取DOM元素
+						   
+							success:function(layero, index){
+								var body = layer.getChildFrame('body', index);
+								body.find('#cid').text(data.cid);
+								body.find('#contactsName').text(data.contactsName);
+								body.find('#cname').text(data.cname);
+								body.find('#cname1').text(data.cname);
+								body.find('#email').text(data.email);
+								body.find('#phone').text(data.phone);
+								body.find('#position').text(data.position);
+								body.find('#industry').text(data.industry);
+								body.find('#position').text(data.position);
+								body.find('#address').text(data.address);
+								body.find('#cNotes').text(data.cNotes);
+								body.find('#tel').text(data.tel);
+								body.find('#website').text(data.website);
+								body.find('#wechatName').text(data.wechatName);
+								
+								body.find('#cSource').text(data.cSource);
+							}
+						    
+						});
 
 					} else if (layEvent === 'del') {
 						layer.confirm('真的删除ID为：' + data.cid + "的客户吗?", function(index) {
@@ -309,7 +347,7 @@
 								body.find('#website').val(data.website);
 								body.find('#wechatName').val(data.wechatName);
 								//下拉框赋值
-								body.find('[name="source"]').val(data.city);
+								// body.find('[name="source"]').val(data.city);
 
 
 								//方法二：获取的子页面的 div
@@ -324,4 +362,5 @@
 			});
 		</script>
 	</body>
+	
 </html>

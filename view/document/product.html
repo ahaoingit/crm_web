@@ -78,7 +78,7 @@
 						"Token":selectToken()
 						},
 					elem: '#demo',
-					height: 420,
+					
 					url: serverUrl + "/product/findProductForPage" //数据接口
 						,
 					title: 'product',
@@ -176,6 +176,9 @@
 								layer.confirm('确定批量删除吗？', function(index) {
 									layer.close(index);
 									$.ajax({
+										headers:{
+											"Token":selectToken()
+											},
 										type: 'post',
 										dataType: 'json',
 										contentType: "application/json;charset=utf-8",
@@ -219,6 +222,9 @@
 						layer.confirm('真的删除ID为：' + data.pid + "的用户吗?", function(index) {
 
 							$.ajax({
+								headers:{
+									"Token":selectToken()
+									},
 								url: serverUrl + "/product/deleteCurrProduct",
 								type: 'get',
 								data: {
@@ -231,6 +237,11 @@
 										layer.msg("删除失败", {
 											icon: 5
 										});
+										setTimeout(function() {
+											window.parent.location.reload();
+											var index = parent.layer.getFrameIndex(window.name);
+											parent.layer.close(index);
+										}, 1000);
 									} else {
 
 										obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
@@ -239,6 +250,11 @@
 										layer.msg("删除成功", {
 											icon: 1
 										});
+										setTimeout(function() {
+											window.parent.location.reload();
+											var index = parent.layer.getFrameIndex(window.name);
+											parent.layer.close(index);
+										}, 1000);
 									}
 								}
 							});
