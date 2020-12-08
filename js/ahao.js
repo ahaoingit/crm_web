@@ -71,6 +71,9 @@ function convertNum(allDepartmentData) {
 	for(index in allDepartmentData) {
 		allDepartmentData[index].dParentId = departMap.get(allDepartmentData[index].dParentId);
 	}
-	
+
 	return allDepartmentData;
 }
+
+
+

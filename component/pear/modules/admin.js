@@ -13,17 +13,17 @@ layui.define(['table', 'jquery', 'element', 'form', 'tab', 'menu', 'frame'],
 		var sideMenu;
 		var bodyTab;
 		var config;
-		
+
 
 		var pearAdmin = new function() {
-			
+
 			var configPath = '';
-			
+
 			this.setConfigPath = function(path){
-				
+
 				configPath = path;
 			}
-			
+
 
 			this.render = function(initConfig) {
 				if (initConfig != undefined) {
@@ -37,9 +37,9 @@ layui.define(['table', 'jquery', 'element', 'form', 'tab', 'menu', 'frame'],
 
 			this.readConfig = function() {
 				var defer = $.Deferred();
-				var configUrl = (configPath == '' ? "pear.config.json" : configPath) + "?fresh=" + Math.random();
+				var configUrl = (configPath === '' ? "pear.config.json" : configPath) + "?fresh=" + Math.random();
 				$.getJSON(configUrl, function(result) {
-					defer.resolve(result)
+					defer.resolve(result);
 				});
 				return defer.promise();
 			}
@@ -52,13 +52,16 @@ layui.define(['table', 'jquery', 'element', 'form', 'tab', 'menu', 'frame'],
 			this.menuRender = function(param) {
 				sideMenu = pearMenu.render({
 					elem: 'sideMenu',
-					async: param.menu.async != undefined ? param.menu.async : true,
+					async: param.menu.async !== undefined ? param.menu.async : true,
 					theme: "dark-theme",
 					height: '100%',
-					control: param.menu.control ? 'control' : false, // control 
+					control: param.menu.control ? 'control' : false, // control
 					defaultMenu: 0,
 					accordion: param.menu.accordion,
 					url: param.menu.data,
+					// headers:{
+					// 	"Token":selectToken()
+					// },
 					data: param.menu.data, //async为false时，传入菜单数组
 					parseData: false,
 					change: function() {
