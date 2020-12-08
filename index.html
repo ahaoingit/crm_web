@@ -84,13 +84,6 @@
 				image.onload = function(){
 					$(".layui-nav-img").attr("src", convert.imageToBase64(image));
 				}
-
-				// 重新设置配置文件读取路径，默认为同级目录下的 pear.config.json
-				myAjax("/sysUsers/getIndexData",{},"post",(res)=>{
-					if (res.code === 1) {
-
-					}
-				});
 				admin.setConfigPath("config/pear.config.json");
 				// 进行框架初始化
 				admin.render();

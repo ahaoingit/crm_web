@@ -82,25 +82,25 @@
 									<div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
 										<div class="pear-card2">
 											<div class="title">公海客户</div>
-											<div class="count">21</div>
+											<div class="count" id="clientOfPublicCount"></div>
 										</div>
 									</div>
 									<div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
 										<div class="pear-card2">
-											<div class="title">私海客户</div>
-											<div class="count">32</div>
+											<div class="title">商品</div>
+											<div  class="count" id="clientOfPrivateCount"></div>
 										</div>
 									</div>
 									<div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
 										<div class="pear-card2">
 											<div class="title">商机</div>
-											<div class="count">14</div>
+											<div class="count" id="bussinessCount"></div>
 										</div>
 									</div>
 									<div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
 										<div class="pear-card2">
 											<div class="title">合同</div>
-											<div class="count">63</div>
+											<div class="count" id="contractCount"></div>
 										</div>
 									</div>
 								</div>
@@ -124,7 +124,25 @@
 		<!--</div>-->
 		<script src="../../component/layui/layui.js" charset="utf-8"></script>
 		<script src="../../component/pear/pear.js"></script>
+		<<script src="../../component/jquery.min.js"></script>
+		<script src="../../js/ahao.js"></script>
 		<script>
+			myAjax("/sysUsers/getIndexData",{},"post",(res)=>{
+				var clientOfPublicCount = $("#clientOfPublicCount");
+				var clientOfPrivateCount = $("#clientOfPrivateCount");
+				var bussinessCount = $("#bussinessCount");
+				var contractCount = $("#contractCount");
+				if (res.code === 1) {
+					console.log(clientOfPrivateCount);
+					clientOfPublicCount.html(res.obj.clientOfPublicNum);
+					clientOfPrivateCount.html(res.obj.productNum);
+					bussinessCount.html(res.obj.businessNum);
+					contractCount.html(res.obj.contractNum)
+				}
+			});
+
+
+
 			layui.use(['layer', 'echarts', 'carousel', 'element', 'table'], function() {
 				var $ = layui.jquery,
 					layer = layui.layer,

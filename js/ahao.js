@@ -11,7 +11,7 @@ function savaToken(token) {
 
     }else {
         let storage = window.localStorage;
-        storage["token"] = token;
+        storage["Token"] = token;
     }
 }
 
