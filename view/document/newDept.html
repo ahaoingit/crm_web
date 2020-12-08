@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="../../component/pear/css/pear.css" />
+		<link rel="stylesheet" href="../../component/layui/css/layui.css" />
+		<script src="../../component/layui/layui.js"></script>
+		<script src="../../component/pear/pear.js"></script>
+		<script src="../../js/ahao.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<style>
+		.d_query{
+			text-align: center;
+		}
+		
+		.layui-input{
+			width: 300px;
+		}
+		.demo-tree{
+			margin-top: 30px;
+			
+			font-size: 20px;
+		}
+		/*修改源码点击选中变色*/
+		   /* .custom-tree-item-clicked {
+		        color: #ff5722
+		    } */
+			#enterprise,.demo-tree{
+				display: inline-block;
+				margin-top: 50px;
+				margin-left: 150px;
+				vertical-align: top;
+			}
+			/* .layui-card {
+				
+				width: 500px;
+				background-color: #f6f5f5;
+				margin-top: 30px;
+			}
+			
+			.layui-card-header {
+				padding-left: 30px;
+				height: 50px;
+				line-height: 50px;
+				background-color: #5FB878;
+				font-size: 20px;
+			} */
+			
+			#left,#right
+			{
+			    display: inline-block;
+			}
+			
+			#left
+			{
+			    width:200px;
+			    text-align:right;
+			}
+			
+			#left li,#right li
+			{
+			    display:block;
+			    /* margin-top:23px; */
+				margin: 30px;
+				font-size: 16px;
+			}
+	</style>
+	</head>
+	<body>
+		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+		  <legend>部门管理</legend>
+		</fieldset>
+		
+		<div class="d_query">
+		  <div class="layui-inline">
+		    <input type="text" class="layui-input" id="tree_name" autocomplete="off" />
+		  </div>
+		  <button class="layui-btn" id="btn_query">搜索</button>
+		</div>
+		
+		<div id="dept" class="demo-tree demo-tree-box"></div>
+		
+		<div id="enterprise">
+			<div class="layui-row">
+			    <div class="layui-col-xs4">
+			      <div class="grid-demo grid-demo-bg1">
+					  <img src="../../admin/images/1.svg" >
+				  </div>
+			    </div>
+			    <div class="layui-col-xs8">
+			      <div class="grid-demo">
+					  <div id="left">
+					  	<ul>
+					  		<li><label>企业名称：</label></li>
+					  		<li><label>注册时间：</lable></li>
+							<li><label>管理员：</label></li>
+							<li><label>管理员电话：</label></li>
+					  		
+					  	</ul>
+					  </div>
+					  
+					  <div id="right">
+					  	<ul>
+					  		<li>老板吃得更多</li>
+					  		<li>2018-10-21</li>
+							<li>五花肉老板</li>
+							<li>18322544110</li>
+					  	</ul>
+					  </div>
+				  </div>
+			    </div>
+			  </div>
+			  
+			      
+		</div>
+		<!--新增节点-->
+		<div id="add-node" class="layui-fluid" style="display: none;">
+		    <form class="layui-form" id="add-form" action="">
+		        <input type="text" name="parentId" style="display:none;" class="layui-input">
+		        <div class="layui-form-item">
+		            <label class="layui-form-label">部门名称</label>
+		            <div class="layui-input-inline">
+		                <input type="text" name="title" class="layui-input" required="" lay-verify="required">
+		            </div>
+		        </div>
+		        <div class="layui-form-item">
+		            <div class="layui-input-block">
+		                <button class="layui-btn" lay-submit lay-filter="addNode">保存</button>
+		            </div>
+		        </div>
+		    </form>
+		</div>
+		
+		<!--修改节点-->
+		<div id="update-node" class="layui-fluid" style="display: none;">
+		    <form class="layui-form" id="update-form" action="">
+		        <input type="text" name="deptId" style="display:none;" class="layui-input">
+		        <input type="text" name="parentId" style="display:none;" class="layui-input">
+		        <div class="layui-form-item">
+		            <label class="layui-form-label">部门名称</label>
+		            <div class="layui-input-inline">
+		                <input type="text" name="title" class="layui-input" required="" lay-verify="required">
+		            </div>
+		        </div>
+		        <div class="layui-form-item">
+		            <div class="layui-input-block">
+		                <button class="layui-btn" lay-submit lay-filter="updateNode">保存</button>
+		            </div>
+		        </div>
+		    </form>
+		</div>
+		<script type="text/javascript">
+			layui.use(['tree', 'util'], function(){
+			    var tree = layui.tree
+			        ,layer = layui.layer
+			        ,util = layui.util
+			    //模拟数据
+			      ,data = [{
+			      // 第一级 1
+			        title: '宇宙赚钱公司'
+			        ,id: 1
+			        ,field: 'name'
+			        ,checked: true
+			        ,spread: true
+			        // 第二级 1-1
+			        ,children: [{
+			          title: '商务部'
+			          ,id: 11
+			          ,field: 'name11'
+			          ,spread: true
+			      
+			        },{
+			      	  // 二级1-2
+			          title: '技术部'
+			          ,id: 12
+			          ,spread: true
+			      	
+			      	// 三级
+			          ,children: [{
+			      		// 三级1-2-1
+			            title: 'java技术组'
+			            ,id: 121
+			            ,field: ''
+			            
+			          },{
+			      		// 三级1-2-2
+			            title: 'php技术组'
+			            ,id: 122
+			            ,field: ''
+			      	  
+			          },{
+			      		// 三级1-2-3
+			            title: '数据分析组'
+			            ,id: 123
+			            ,field: ''
+			      	  
+			          }]
+			        },{
+			      	  // 二级1-3
+			          title: '财务部'
+			          ,id: 13
+			          ,field: ''
+					  ,spread: true
+			      	// 三级1-3-1
+			         
+			        },{
+						// 二级 1-4
+						  title: '客服部'
+						  ,id: 14
+						  ,field: ''
+						  ,spread: true
+						// 三级1-4-1
+						  ,children: [{
+						    title: '售后服务部'
+						    ,id: 141
+						    ,field: ''
+						  
+						  }]
+						
+						
+					}]
+			      
+			      }]; 
+			  
+			    //tree渲染
+			    tree.render({
+			       elem: '#dept' 
+			      ,data: data
+			      ,id: 'deptTree'
+			      ,showLine: true //是否开启连接线
+			      ,edit: ['add', 'update', 'del']
+				   ,customOperate: true //自定义属性//开启操作节点的图标
+			      ,click: function(obj){
+			        var data = obj.data; //获取当前点击的节点数据
+			        layer.msg('状态：'+ obj.state + '<br>节点数据：' + JSON.stringify(data));
+			      }
+				  // ,customOperate: true 
+				  ,operate:function(obj){
+					 var type = obj.type; //得到操作类型：add、update、del
+					    var data = obj.data; //得到当前节点的数据
+					    var elem = obj.elem; //得到当前节点元素 
+						 
+						 
+						 var id = data.id;
+						 if(type === 'add'){ //增加节点
+						       //返回 key 值
+							   
+						       return 123;
+							   
+							   
+						     } else if(type === 'update'){ //修改节点
+						       console.log(elem.find('.layui-tree-txt').html()); //得到修改后的内容
+						     } else if(type === 'del'){
+								 layer.msg('删除成功！', {icon: 1});
+						     };
+						 // if (type === 'add') { //增加节点
+						 // 			$("#add-form input[name='parentId']").val(id);
+						 // 			$("#add-form input[name='title']").val('');
+						 // 			index0pen = layer.open({
+						 // 				type: 1,
+						 // 				title: "新增",
+						 // 				area: ['500px', '200px'],
+						 // 				content: $("#add-node")
+						 // 			});
+						 // 		} else if (type === 'update') { //修改节点
+						 // 			$("#update-form input[name='deptId']").val(id);
+						 // 			$("#update-form input[name='parentId']").val(data.parentId);
+						 // 			$("#update-form input[name='title']").val(data.title);
+						 // 			index0pen = layer.open({
+						 // 				type: 1,
+						 // 				title: "修改",
+						 // 				area: ['500px', '200px'],
+						 // 				content: $("#update-node")
+						 // 			});
+						 // 		} else if (type === 'del') {
+							// 		layer.confirm("确定删除此部门吗？", function(index){
+							// 			$.ajax({
+							// 				url: '' ,
+							// 				type: 'get',
+							// 				dataType: 'json',
+							// 				success: function (data) {
+							// 					if (data.code == 0) {
+							// 						//关闭
+							// 						layer.close(index0pen);
+							// 						layer.msg('删除成功！', {icon: 1});
+							// 						setTimeout(function () {
+							// 							window.location.reload();
+							// 						}, 500);
+							// 					} else {
+							// 						layer.msg(data.msg, {icon: 2});
+							// 					}
+							// 				}
+							// 			});
+							// 		})//删除节点
+						 			
+						 // 		}
+				  }
+			    });
+			  
+			  //可以重载所有基础参数
+			 tree.reload('demoId', {
+			   //新的参数
+			 });
+			 
+			 form.on('submit(updateNode)',function(){
+				 layer.msg('成功！', {icon: 1});
+				 	setTimeout(function () {
+				 		window.location.reload();
+				 	}, 500);
+			 })
+			  
+			    //搜索节点值
+			    $('#btn_query').click(function () {
+			      var name = $("#tree_name").val(); //搜索值
+			      var elem = $("#dept").find('.layui-tree-txt').css('color', ''); //搜索文本与设置默认颜色
+			      if (!name) {
+			        return; //无搜索值返回
+			      }
+			      elem.filter(':contains(' + name + ')').css('color', '#FFB800'); //搜索文本并设置标志颜色
+			      elem.parents('.layui-tree-pack').prev().find('.layui-tree-iconClick').click(); //展开选项
+			      //console.log(elem);
+			    })
+			  
+			  });
+		</script>
+	</body>
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<title>公海</title>
+		<link rel="stylesheet" href="../../component/pear/css/pear.css" />
+		<link rel="stylesheet" href="../../component/layui/css/layui.css" />
+		<style>
+			body{margin: 10px;}
+     .layui-input{
+     	width: 300px;
+     }
+	 .search{
+	 	margin-top: 20px;
+	 	 text-align: center;
+	 	 
+	 }
+    </style>
+
+	</head>
+	<body>
+
+		<!-- 搜索 -->
+		<div class="layui-fluid search">
+			<form class="layui-form layui-col-space5">
+
+				<div class="layui-inline layui-show-xs-block">
+					<input type="text" class="layui-input" name="search_input" placeholder="请输入信息" autocomplete="off">
+				</div>
+				<div class="layui-inline layui-show-xs-block">
+					<button class="layui-btn search_btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+				</div>
+
+			</form>
+
+			<!-- <button class="layui-btn layui-btn-normal add_btn" lay-event="add_btn"  id="add_btn"><i class="layui-icon"></i>新增合同</button>
+		<button class="layui-btn layui-btn-danger delAll_btn" ><i class="layui-icon"></i>批量删除</button> -->
+		</div>
+		<div class="container" style="width: 100%;">
+			<table class="layui-hide" id="demo" lay-filter="test"></table>
+			<div id="pages"></div>
+		</div>
+
+<!-- 表格行操作 -->
+		<script type="text/html" id="barDemo">
+			<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="detail">查看</a>			  
+			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+		<script src="../../component/layui/layui.js"></script>
+		<script src="../../component/pear/pear.js"></script>
+		<script src="../../js/ahao.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../component/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			layui.config({
+				version: '1606182314890' //为了更新 js 缓存，可忽略
+			});
+
+			layui.use(['laydate', 'laypage', 'layer', 'table', 'util'], function() {
+				var laydate = layui.laydate //日期
+					,
+					laypage = layui.laypage //分页
+					,
+					layer = layui.layer //弹层
+					,
+					table = layui.table //表格
+					,
+					util = layui.util
+
+
+
+				//执行一个 table 实例
+				table.render({
+					headers: {
+						"Token": selectToken()
+					},
+					elem: '#demo',
+					height: 420,
+					url: serverUrl + '/client/findClientOfPublicForPage', //数据接口
+
+					title: 'userListTable',
+					page: true //开启分页
+						,
+					toolbar: 'default', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+					parseData: function(res) { //res 即为原始返回的数据
+						return {
+							"code": 0,
+							"data": res.data,
+							"count": res.count,
+						};
+					},
+					defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+						title: '提示',
+						layEvent: 'LAYTABLE_TIPS',
+						icon: 'layui-icon-tips'
+					}],
+					cols: [
+						[{
+								type: 'checkbox',
+								width: 60,
+
+							}, {
+								field: 'cid',
+								title: '序号',
+								width: 80
+							}, {
+								field: 'contactsName',
+								title: '联系人名称',
+								width: 130,
+								unresize: true,
+								sort: true
+							},
+							{
+								field: 'cname',
+								title: '客户名称',
+								width: 230
+							},
+							// {
+							// 	field: 'position',
+							// 	title: '职务',
+							// 	width: 180,
+							// 	edit: 'text'
+							// },
+							{
+								field: 'industry',
+								title: '行业',
+								width: 130,
+								edit: 'text'
+							},
+							// {
+							// 	field: 'address',
+							// 	title: '地址',
+							// 	width: 230,
+							// 	edit: 'text',
+							// 	sort: true
+							// },
+							{
+								field: 'cSource',
+								title: '客户来源',
+								width: 130
+							},
+							//  {
+							// 	field: 'cNotes',
+							// 	title: '备注',
+							// 	width: 180
+							// },
+							{
+								field: 'phone',
+								title: '手机号码',
+								width: 160
+							},
+							// {
+							// 	field: 'tel',
+							// 	title: '固定电话',
+							// 	width: 180,
+							// 	edit: 'text'
+							// },
+							// {
+							// 	field: 'website',
+							// 	title: '网站',
+							// 	width: 230,
+							// 	edit: 'text'
+							// }
+							{
+								field: 'wechatName',
+								title: '微信',
+								width: 160
+							},
+							{
+
+								title: '操作',
+								align: 'center',
+								toolbar: '#barDemo',
+								width: 230
+							}
+						]
+					]
+
+				});
+
+				//监听头工具栏事件
+				table.on('toolbar(test)', function(obj) {
+					var checkStatus = table.checkStatus(obj.config.id),
+						data = checkStatus.data; //获取选中的数据
+					switch (obj.event) {
+						case 'add':
+							layer.open({
+								type: 2,
+								title: '请填写表单',
+								shadeClose: true,
+								shade: 0.8,
+								area: ['1000px', '90%'],
+								shadeClose: false,
+								content: 'add_gonghai.html' //iframe的url
+							});
+
+							break;
+						case 'update':
+							// layer.msg("update")
+							if (data.length === 0) {
+								layer.msg('请选择一行');
+							} else if (data.length > 1) {
+								layer.msg('只能同时编辑一个');
+							} else {
+								
+								layer.open({
+								    type:2 ,
+								    title: '<h1 style="font-size: 25px;text-align: center">编辑公海客户</h1>',
+								    shadeClose: true,
+								    shade: 0.6,
+								    area: ['1100px', '85%'],
+								    shadowColor: false,
+								    content: 'add_gonghai.html',
+								    success: function (layero, index) {
+								        //方法一：body.html() body里面的内容
+								        var body = layer.getChildFrame('body', index);
+								       //给用户id赋值
+										body.find('#cid').val(data.cid);
+										body.find('#contactsName').val(data.contactsName);
+								        body.find('#cname').val(data.cname);
+								        body.find('#email').val(data.email);
+								        body.find('#phone').val(data.phone);
+								        body.find('#position').val(data.position);
+										body.find('#industry').val(data.industry);
+										body.find('#position').val(data.position);
+										body.find('#address').val(data.address);
+										body.find('#cNotes').val(data.cNotes);
+										body.find('#tel').val(data.tel);
+										body.find('#website').val(data.website);
+										body.find('#wechatName').val(data.wechatName);
+										//下拉框赋值
+										body.find('[name="city"]').val(data.city);
+										
+								        
+										//方法二：获取的子页面的 div
+										var div = layero.find('iframe').contents();
+																
+										div.find('#cusManager').val(data.cusManager);
+								    }
+								});
+							}
+							break;
+						case 'delete':
+							layer.msg("delete")
+							break;
+					};
+				});
+
+				//监听行工具事件
+				table.on('tool(test)', function(obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+					var data = obj.data //获得当前行数据
+						,
+						layEvent = obj.event; //获得 lay-event 对应的值
+					if (layEvent === 'detail') {
+						// layer.msg('查看操作');
+						layer.alert('序号:'+ data.cid+'<br>联系人名称:'+data.contactsName+'<br>客户名称：'+data.cname+
+						'<br>手机号:'+data.phone+'<br>职务:'+data.position+'<br>行业:'+data.industry+'<br>客户来源:'+data.source+
+						'<br>地址:'+data.address+'<br>备注:'+data.cNotes+'<br>固定电话:'+data.tel+'<br>网站:'+data.website
+						+'<br>邮箱:'+data.email+'<br>微信:'+data.wechatName);
+						
+					} else if (layEvent === 'del') {
+						layer.confirm('真的删除ID为：' + data.cid + "的客户吗?", function(index) {
+							obj.del(); //删除对应行（tr）的DOM结构
+							layer.close(index);
+							//向服务端发送删除指令
+						});
+
+
+					} else if (layEvent === 'edit') {
+						layer.open({
+						    type:2 ,
+						    title: '<h1 style="font-size: 25px;text-align: center">编辑公海客户</h1>',
+						    shadeClose: true,
+						    shade: 0.6,
+						    area: ['1100px', '85%'],
+						    shadowColor: false,
+						    content: 'add_gonghai.html',
+						    success: function (layero, index) {
+						        //方法一：body.html() body里面的内容
+						        var body = layer.getChildFrame('body', index);
+						       //给用户id赋值
+								body.find('#cid').val(data.cid);
+								body.find('#contactsName').val(data.contactsName);
+						        body.find('#cname').val(data.cname);
+						        body.find('#email').val(data.email);
+						        body.find('#phone').val(data.phone);
+						        body.find('#position').val(data.position);
+								body.find('#industry').val(data.industry);
+								body.find('#position').val(data.position);
+								body.find('#address').val(data.address);
+								body.find('#cNotes').val(data.cNotes);
+								body.find('#tel').val(data.tel);
+								body.find('#website').val(data.website);
+								body.find('#wechatName').val(data.wechatName);
+								//下拉框赋值
+								body.find('[name="city"]').val(data.city);
+								
+						        
+								//方法二：获取的子页面的 div
+								var div = layero.find('iframe').contents();
+														
+								div.find('#cusManager').val(data.cusManager);
+						    }
+						});
+					}
+				});
+
+				//编辑
+				table.on('edit(test)', function(obj) {
+
+				})
+
+
+			});
+		</script>
+	</body>
+</html>
